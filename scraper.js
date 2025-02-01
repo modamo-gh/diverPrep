@@ -114,8 +114,8 @@ var scrapeAndStoreEnemies = function () { return __awaiter(void 0, void 0, void 
                     return [3 /*break*/, 6];
                 }
                 name_1 = $("h1 span").text().trim();
-                imageURL = $("aside figure a").attr("href");
-                if (!(name_1 && imageURL && imageURL.startsWith("/wiki/File:"))) return [3 /*break*/, 6];
+                imageURL = $("aside figure a img").attr("src");
+                if (!(name_1 && imageURL)) return [3 /*break*/, 6];
                 return [4 /*yield*/, storeEnemyData(name_1, BASE_URL + imageURL)];
             case 5:
                 _a.sent();

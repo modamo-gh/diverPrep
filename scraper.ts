@@ -65,9 +65,9 @@ const scrapeAndStoreEnemies = async () => {
 		}
 
 		const name = $("h1 span").text().trim();
-		const imageURL = $("aside figure a").attr("href");
+		const imageURL = $("aside figure a img").attr("src");
 
-		if (name && imageURL && imageURL.startsWith("/wiki/File:")) {
+		if (name && imageURL) {
 			await storeEnemyData(name, BASE_URL + imageURL);
 		}
 	}
