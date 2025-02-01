@@ -1,8 +1,20 @@
 import axios from "axios";
 import * as cheerio from "cheerio";
+import * as dotenv from "dotenv";
+import { Client } from "pg";
+
+dotenv.config();
 
 const BASE_URL = "https://helldivers.wiki.gg";
 const ENEMY_LIST_URL = `${BASE_URL}/wiki/Enemies`;
+
+const client = new Client({
+	host: process.env.PGHOST,
+	user: process.env.PGUSER,
+	password: process.env.PGPASSWORD,
+	database: process.env.PGDATABASE,
+	port: Number(process.env.PGPORT)
+});
 
 const headers = {
 	"User-Agent": "Mozilla/5.0"
@@ -40,9 +52,10 @@ const getEnemyLinks = async () => {
 	return enemyLinks;
 };
 
-const getEnemyImages = async () => {
+const scrapeAndStoreEnemies = async () => {
+	await client.connect();
+
 	const enemyLinks = await getEnemyLinks();
-	const enemyImages: string[] = [];
 
 	for (const enemyLink of enemyLinks) {
 		const $ = await fetchPage(enemyLink);
@@ -51,17 +64,30 @@ const getEnemyImages = async () => {
 			continue;
 		}
 
-		const href = $("aside figure a").attr("href");
+		const name = $("h1 span").text().trim();
+		const imageURL = $("aside figure a").attr("href");
 
-		if (href && href.startsWith("/wiki/File:")) {
-			enemyImages.push(BASE_URL + href);
+		if (name && imageURL && imageURL.startsWith("/wiki/File:")) {
+			await storeEnemyData(name, BASE_URL + imageURL);
 		}
 	}
 
-	return enemyImages;
+	await client.end();
+
+	console.log("Scraping complete!");
 };
 
-(async () => {
-	const images = await getEnemyImages();
-	console.log(images);
-})();
+const storeEnemyData = async (name: string, imageURL: string) => {
+	try {
+		await client.query(
+			"INSERT INTO enemies (name, image_url) VALUES ($1, $2) ON CONFLICT (name) DO NOTHING;",
+			[name, imageURL]
+		);
+
+		console.log(`Stored: ${name}`);
+	} catch (error) {
+		console.error("Error storing enemy data:", error);
+	}
+};
+
+scrapeAndStoreEnemies();
