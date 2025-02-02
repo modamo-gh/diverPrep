@@ -115,7 +115,7 @@ var getWeaponLinks = function () { return __awaiter(void 0, void 0, void 0, func
     });
 }); };
 var scrapeAndStoreEnemies = function () { return __awaiter(void 0, void 0, void 0, function () {
-    var enemyLinks, _i, enemyLinks_1, enemyLink, $, faction, imageURL, name_1;
+    var enemyLinks, _i, enemyLinks_1, enemyLink, $, faction, imageURL, name_1, anatomyTable;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0: return [4 /*yield*/, client.connect()];
@@ -127,29 +127,27 @@ var scrapeAndStoreEnemies = function () { return __awaiter(void 0, void 0, void 
                 _i = 0, enemyLinks_1 = enemyLinks;
                 _a.label = 3;
             case 3:
-                if (!(_i < enemyLinks_1.length)) return [3 /*break*/, 7];
+                if (!(_i < enemyLinks_1.length)) return [3 /*break*/, 6];
                 enemyLink = enemyLinks_1[_i];
                 return [4 /*yield*/, fetchPage(enemyLink)];
             case 4:
                 $ = _a.sent();
                 if (!$) {
-                    return [3 /*break*/, 6];
+                    return [3 /*break*/, 5];
                 }
                 faction = $("aside h3:contains('Faction') + div span a")
                     .text()
                     .trim();
                 imageURL = $("aside figure a img").attr("src");
                 name_1 = $("h1 span").text().trim();
-                if (!(faction && imageURL && name_1)) return [3 /*break*/, 6];
-                return [4 /*yield*/, storeEnemyData(faction, BASE_URL + imageURL, name_1)];
+                anatomyTable = $("h2:contains('Anatomy')");
+                console.log(name_1, anatomyTable.text());
+                _a.label = 5;
             case 5:
-                _a.sent();
-                _a.label = 6;
-            case 6:
                 _i++;
                 return [3 /*break*/, 3];
-            case 7: return [4 /*yield*/, client.end()];
-            case 8:
+            case 6: return [4 /*yield*/, client.end()];
+            case 7:
                 _a.sent();
                 console.log("Scraping complete!");
                 return [2 /*return*/];
@@ -239,4 +237,4 @@ var storeWeaponData = function (imageURL, name, penetration) { return __awaiter(
         }
     });
 }); };
-scrapeAndStoreWeapons();
+scrapeAndStoreEnemies();

@@ -91,9 +91,13 @@ const scrapeAndStoreEnemies = async () => {
 		const imageURL = $("aside figure a img").attr("src");
 		const name = $("h1 span").text().trim();
 
-		if (faction && imageURL && name) {
-			await storeEnemyData(faction, BASE_URL + imageURL, name);
-		}
+		const anatomyTable =$("h2:contains('Anatomy')");
+		
+        console.log(name, anatomyTable.text())
+
+		// if (faction && imageURL && name) {
+		// 	await storeEnemyData(faction, BASE_URL + imageURL, name);
+		// }
 	}
 
 	await client.end();
@@ -168,4 +172,4 @@ const storeWeaponData = async (
 	}
 };
 
-scrapeAndStoreWeapons();
+scrapeAndStoreEnemies();
