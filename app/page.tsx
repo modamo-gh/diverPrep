@@ -3,9 +3,9 @@
 import EnemySelector from "@/components/EnemySelector";
 import FactionSelector from "@/components/FactionSelector";
 import SectionHeader from "@/components/SectionHeader";
+import WeaponSelector from "@/components/WeaponSelector";
 import { Enemy } from "@/types/Enemy";
 import { Weapon } from "@/types/Weapon";
-import Image from "next/image";
 import { useEffect, useState } from "react";
 
 const Home = () => {
@@ -56,42 +56,11 @@ const Home = () => {
 				</div>
 				<div className="flex flex-col flex-1 justify-center">
 					<SectionHeader name={"Weapon"} />
-					<div className="bg-blue-500 flex flex-row flex-[4] items-center justify-center w-full">
-						<button
-							onClick={() =>
-								setWeaponIndex((prevIndex) =>
-									prevIndex === 0
-										? weapons.length - 1
-										: prevIndex - 1
-								)
-							}
-						>
-							Previous
-						</button>
-						<div className="flex flex-col flex-1 items-center justify-center">
-							<Image
-								alt={weapons[weaponIndex]?.name}
-								className="h-64 object-contain w-64"
-								src={weapons[weaponIndex]?.image_url}
-							/>
-							<p>{weapons[weaponIndex]?.name}</p>
-							<p>
-								Max Penetration:{" "}
-								{weapons[weaponIndex]?.penetration}
-							</p>
-						</div>
-						<button
-							onClick={() =>
-								setWeaponIndex((prevIndex) =>
-									prevIndex === weapons.length - 1
-										? 0
-										: prevIndex + 1
-								)
-							}
-						>
-							Next
-						</button>
-					</div>
+					<WeaponSelector
+						setWeaponIndex={setWeaponIndex}
+						weaponIndex={weaponIndex}
+						weapons={weapons}
+					/>
 				</div>
 			</div>
 			<div className="flex flex-1 items-center justify-around">
