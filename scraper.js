@@ -157,39 +157,45 @@ var scrapeAndStoreEnemies = function () { return __awaiter(void 0, void 0, void 
     });
 }); };
 var scrapeAndStoreWeapons = function () { return __awaiter(void 0, void 0, void 0, function () {
-    var weaponLinks, _i, weaponLinks_1, weaponLink, $, imageURL, name_2;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
+    var weaponLinks, _i, weaponLinks_1, weaponLink, $, imageURL, name_2, penetration;
+    var _a, _b;
+    return __generator(this, function (_c) {
+        switch (_c.label) {
             case 0: return [4 /*yield*/, client.connect()];
             case 1:
-                _a.sent();
+                _c.sent();
                 return [4 /*yield*/, getWeaponLinks()];
             case 2:
-                weaponLinks = _a.sent();
+                weaponLinks = _c.sent();
                 _i = 0, weaponLinks_1 = weaponLinks;
-                _a.label = 3;
+                _c.label = 3;
             case 3:
                 if (!(_i < weaponLinks_1.length)) return [3 /*break*/, 7];
                 weaponLink = weaponLinks_1[_i];
                 return [4 /*yield*/, fetchPage(weaponLink)];
             case 4:
-                $ = _a.sent();
+                $ = _c.sent();
                 if (!$) {
                     return [3 /*break*/, 6];
                 }
                 imageURL = $("aside figure a img").last().attr("src");
                 name_2 = $("h1 span").text().trim();
-                if (!(imageURL && name_2)) return [3 /*break*/, 6];
-                return [4 /*yield*/, storeWeaponData(BASE_URL + imageURL, name_2)];
+                penetration = Number(((_b = (_a = $("aside section h3:contains('Penetration') + div span a img")
+                    .attr("alt")) === null || _a === void 0 ? void 0 : _a.match(/\d+/)) === null || _b === void 0 ? void 0 : _b[0]) ||
+                    $("aside section h3:contains('Penetration') + div")
+                        .text()
+                        .trim());
+                if (!(imageURL && name_2 && penetration)) return [3 /*break*/, 6];
+                return [4 /*yield*/, storeWeaponData(BASE_URL + imageURL, name_2, penetration)];
             case 5:
-                _a.sent();
-                _a.label = 6;
+                _c.sent();
+                _c.label = 6;
             case 6:
                 _i++;
                 return [3 /*break*/, 3];
             case 7: return [4 /*yield*/, client.end()];
             case 8:
-                _a.sent();
+                _c.sent();
                 console.log("Scraping complete!");
                 return [2 /*return*/];
         }
@@ -214,13 +220,13 @@ var storeEnemyData = function (faction, imageURL, name) { return __awaiter(void 
         }
     });
 }); };
-var storeWeaponData = function (imageURL, name) { return __awaiter(void 0, void 0, void 0, function () {
+var storeWeaponData = function (imageURL, name, penetration) { return __awaiter(void 0, void 0, void 0, function () {
     var error_3;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 _a.trys.push([0, 2, , 3]);
-                return [4 /*yield*/, client.query("INSERT INTO weapons (name, image_url) VALUES ($1, $2) ON CONFLICT (name) DO NOTHING;", [name, imageURL])];
+                return [4 /*yield*/, client.query("INSERT INTO weapons (name, image_url, penetration) VALUES ($1, $2, $3) ON CONFLICT (name) DO NOTHING;", [name, imageURL, penetration])];
             case 1:
                 _a.sent();
                 console.log("Stored: ".concat(name));

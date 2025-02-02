@@ -112,11 +112,20 @@ const scrapeAndStoreWeapons = async () => {
 		if (!$) {
 			continue;
 		}
+
 		const imageURL = $("aside figure a img").last().attr("src");
 		const name = $("h1 span").text().trim();
+		const penetration = Number(
+			$("aside section h3:contains('Penetration') + div span a img")
+				.attr("alt")
+				?.match(/\d+/)?.[0] ||
+				$("aside section h3:contains('Penetration') + div")
+					.text()
+					.trim()
+		);
 
-		if (imageURL && name) {
-			await storeWeaponData(BASE_URL + imageURL, name);
+		if (imageURL && name && penetration) {
+			await storeWeaponData(BASE_URL + imageURL, name, penetration);
 		}
 	}
 
@@ -144,12 +153,13 @@ const storeEnemyData = async (
 
 const storeWeaponData = async (
 	imageURL: string,
-	name: string
+	name: string,
+	penetration: number
 ) => {
 	try {
 		await client.query(
-			"INSERT INTO weapons (name, image_url) VALUES ($1, $2) ON CONFLICT (name) DO NOTHING;",
-			[name, imageURL]
+			"INSERT INTO weapons (name, image_url, penetration) VALUES ($1, $2, $3) ON CONFLICT (name) DO NOTHING;",
+			[name, imageURL, penetration]
 		);
 
 		console.log(`Stored: ${name}`);

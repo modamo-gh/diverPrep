@@ -13,6 +13,7 @@ type Weapon = {
 	id: number;
 	image_url: string;
 	name: string;
+	penetration: number;
 };
 
 const Home = () => {
@@ -114,7 +115,9 @@ const Home = () => {
 				</div>
 			</div>
 			<div className="flex flex-col flex-1 justify-center">
-				<h1 className="bg-red-500 flex-1 text-black text-center">Weapon</h1>
+				<div className="bg-red-500 flex flex-1  items-center justify-center">
+					<h1 className="text-black text-center">Weapon</h1>
+				</div>
 				<div className="bg-blue-500 flex flex-col flex-[4] items-center justify-center w-full">
 					<button
 						onClick={() =>
@@ -133,6 +136,9 @@ const Home = () => {
 							alt={weapons[weaponIndex]?.name}
 						/>
 						<p>{weapons[weaponIndex]?.name}</p>
+						<p>
+							Max Penetration: {weapons[weaponIndex]?.penetration}
+						</p>
 					</div>
 					<button
 						onClick={() =>
