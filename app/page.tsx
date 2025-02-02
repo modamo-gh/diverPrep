@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useState } from "react";
 
 type Enemy = {
@@ -98,14 +99,23 @@ const Home = () => {
 						Previous
 					</button>
 					<div className="flex flex-col flex-1 items-center justify-center">
-						<img
-							src={filteredEnemies[enemyIndex]?.image_url}
+						<Image
 							alt={filteredEnemies[enemyIndex]?.name}
+							className="h-64 object-contain w-64 "
+							src={filteredEnemies[enemyIndex]?.image_url}
 						/>
 						<p>{filteredEnemies[enemyIndex]?.name}</p>
-						<p>Max Armor Value: {filteredEnemies[enemyIndex]?.max}</p>
-						<p>Most Common Armor Value: {filteredEnemies[enemyIndex]?.mode}</p>
-						<p>Rounded Average Weighted Armor Value: {filteredEnemies[enemyIndex]?.weightedaverage}</p>
+						<p>
+							Max Armor Value: {filteredEnemies[enemyIndex]?.max}
+						</p>
+						<p>
+							Most Common Armor Value:{" "}
+							{filteredEnemies[enemyIndex]?.mode}
+						</p>
+						<p>
+							Rounded Average Weighted Armor Value:{" "}
+							{filteredEnemies[enemyIndex]?.weightedaverage}
+						</p>
 					</div>
 					<button
 						onClick={() =>
@@ -137,9 +147,10 @@ const Home = () => {
 						Previous
 					</button>
 					<div className="flex flex-col flex-1 items-center justify-center">
-						<img
-							src={weapons[weaponIndex]?.image_url}
+						<Image
 							alt={weapons[weaponIndex]?.name}
+							className="h-64 object-contain w-64"
+							src={weapons[weaponIndex]?.image_url}
 						/>
 						<p>{weapons[weaponIndex]?.name}</p>
 						<p>
