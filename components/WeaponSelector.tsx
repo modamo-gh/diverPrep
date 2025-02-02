@@ -1,4 +1,4 @@
-import { WeaponSelectorProps } from "@/types/props/WeaponSelector";
+import { WeaponSelectorProps } from "@/types/props/selectors/Weapon";
 import Image from "next/image";
 
 const WeaponSelector: React.FC<WeaponSelectorProps> = ({

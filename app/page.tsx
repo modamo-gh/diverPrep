@@ -3,6 +3,7 @@
 import EnemySelector from "@/components/EnemySelector";
 import FactionSelector from "@/components/FactionSelector";
 import SectionHeader from "@/components/SectionHeader";
+import TacticalAssessment from "@/components/TacticalAssessment";
 import WeaponSelector from "@/components/WeaponSelector";
 import { Enemy } from "@/types/Enemy";
 import { Weapon } from "@/types/Weapon";
@@ -63,29 +64,12 @@ const Home = () => {
 					/>
 				</div>
 			</div>
-			<div className="flex flex-1 items-center justify-around">
-				<p>
-					Rounded Average Weighted Armor Value?{" "}
-					{weapons[weaponIndex]?.penetration >=
-					filteredEnemies[enemyIndex]?.weightedaverage
-						? "✅"
-						: "❌"}
-				</p>
-				<p>
-					Most Common Armor Value?{" "}
-					{weapons[weaponIndex]?.penetration >=
-					filteredEnemies[enemyIndex]?.mode
-						? "✅"
-						: "❌"}
-				</p>
-				<p>
-					Max Armor Value?{" "}
-					{weapons[weaponIndex]?.penetration >=
-					filteredEnemies[enemyIndex]?.max
-						? "✅"
-						: "❌"}
-				</p>
-			</div>
+			<TacticalAssessment
+				enemyIndex={enemyIndex}
+				filteredEnemies={filteredEnemies}
+				weaponIndex={weaponIndex}
+				weapons={weapons}
+			/>
 		</main>
 	);
 };

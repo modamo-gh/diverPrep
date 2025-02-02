@@ -1,4 +1,4 @@
-import { EnemySelectorProps } from "@/types/props/EnemySelector";
+import { EnemySelectorProps } from "@/types/props/selectors/Enemy";
 import Image from "next/image";
 
 const EnemySelector: React.FC<EnemySelectorProps> = ({
