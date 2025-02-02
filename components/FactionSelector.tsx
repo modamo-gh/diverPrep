@@ -1,4 +1,4 @@
-import { FactionSelectorProps } from "@/types/FactionSelectorProps";
+import { FactionSelectorProps } from "@/types/props/FactionSelector";
 
 const FactionSelector: React.FC<FactionSelectorProps> = ({
 	factionIndex,

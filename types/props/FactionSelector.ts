@@ -1,5 +1,4 @@
 import { Dispatch, SetStateAction } from "react";
-import { Enemy } from "./Enemy";
 
 export type FactionSelectorProps = {
 	factionIndex: number;

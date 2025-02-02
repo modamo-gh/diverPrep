@@ -1,5 +1,6 @@
 "use client";
 
+import EnemySelector from "@/components/EnemySelector";
 import FactionSelector from "@/components/FactionSelector";
 import SectionHeader from "@/components/SectionHeader";
 import { Enemy } from "@/types/Enemy";
@@ -38,7 +39,7 @@ const Home = () => {
 		<main className="bg-gray-500 flex flex-col h-screen w-screen">
 			<div className="flex flex-row flex-[4]">
 				<div className="flex flex-col flex-1 items-center justify-center">
-					<SectionHeader name={"Enemy"}/>
+					<SectionHeader name={"Enemy"} />
 					<div className="bg-red-500 flex flex-col flex-[4] items-center justify-center w-full">
 						<FactionSelector
 							factionIndex={factionIndex}
@@ -46,57 +47,15 @@ const Home = () => {
 							setEnemyIndex={setEnemyIndex}
 							setFactionIndex={setFactionIndex}
 						/>
-						<div className="flex flex-row flex-1">
-							<button
-								onClick={() =>
-									setEnemyIndex((prevIndex) =>
-										prevIndex === 0
-											? filteredEnemies.length - 1
-											: prevIndex - 1
-									)
-								}
-							>
-								Previous
-							</button>
-							<div className="flex flex-col flex-1 items-center justify-center">
-								<Image
-									alt={filteredEnemies[enemyIndex]?.name}
-									className="h-64 object-contain w-64 "
-									src={filteredEnemies[enemyIndex]?.image_url}
-								/>
-								<p>{filteredEnemies[enemyIndex]?.name}</p>
-								<p>
-									Max Armor Value:{" "}
-									{filteredEnemies[enemyIndex]?.max}
-								</p>
-								<p>
-									Most Common Armor Value:{" "}
-									{filteredEnemies[enemyIndex]?.mode}
-								</p>
-								<p>
-									Rounded Average Weighted Armor Value:{" "}
-									{
-										filteredEnemies[enemyIndex]
-											?.weightedaverage
-									}
-								</p>
-							</div>
-							<button
-								onClick={() =>
-									setEnemyIndex((prevIndex) =>
-										prevIndex === filteredEnemies.length - 1
-											? 0
-											: prevIndex + 1
-									)
-								}
-							>
-								Next
-							</button>
-						</div>
+						<EnemySelector
+							enemyIndex={enemyIndex}
+							filteredEnemies={filteredEnemies}
+							setEnemyIndex={setEnemyIndex}
+						/>
 					</div>
 				</div>
 				<div className="flex flex-col flex-1 justify-center">
-					<SectionHeader name={"Weapon"}/>
+					<SectionHeader name={"Weapon"} />
 					<div className="bg-blue-500 flex flex-row flex-[4] items-center justify-center w-full">
 						<button
 							onClick={() =>

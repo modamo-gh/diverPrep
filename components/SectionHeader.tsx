@@ -1,4 +1,5 @@
-import { SectionHeaderProps } from "@/types/SectionHeaderProps";
+import { SectionHeaderProps } from "@/types/props/SectionHeader";
+
 
 const SectionHeader: React.FC<SectionHeaderProps> = ({ name }) => {
 	return (
