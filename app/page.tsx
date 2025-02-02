@@ -1,6 +1,7 @@
 "use client";
 
 import FactionSelector from "@/components/FactionSelector";
+import SectionHeader from "@/components/SectionHeader";
 import { Enemy } from "@/types/Enemy";
 import { Weapon } from "@/types/Weapon";
 import Image from "next/image";
@@ -37,11 +38,7 @@ const Home = () => {
 		<main className="bg-gray-500 flex flex-col h-screen w-screen">
 			<div className="flex flex-row flex-[4]">
 				<div className="flex flex-col flex-1 items-center justify-center">
-					<div className="bg-blue-500 flex flex-col flex-1 items-center justify-center w-full">
-						<h1 className="text-black text-center text-5xl">
-							Enemy
-						</h1>
-					</div>
+					<SectionHeader name={"Enemy"}/>
 					<div className="bg-red-500 flex flex-col flex-[4] items-center justify-center w-full">
 						<FactionSelector
 							factionIndex={factionIndex}
@@ -99,11 +96,7 @@ const Home = () => {
 					</div>
 				</div>
 				<div className="flex flex-col flex-1 justify-center">
-					<div className="bg-red-500 flex flex-1  items-center justify-center">
-						<h1 className="text-black text-center text-5xl">
-							Weapon
-						</h1>
-					</div>
+					<SectionHeader name={"Weapon"}/>
 					<div className="bg-blue-500 flex flex-row flex-[4] items-center justify-center w-full">
 						<button
 							onClick={() =>
