@@ -7,6 +7,7 @@ dotenv.config();
 
 const BASE_URL = "https://helldivers.wiki.gg";
 const ENEMY_LIST_URL = `${BASE_URL}/wiki/Enemies`;
+const WEAPONS_LIST_URL = `${BASE_URL}/wiki/Weapons`;
 
 const client = new Client({
 	host: process.env.PGHOST,
@@ -52,6 +53,26 @@ const getEnemyLinks = async () => {
 	return enemyLinks;
 };
 
+const getWeaponLinks = async () => {
+	const $ = await fetchPage(WEAPONS_LIST_URL);
+
+	if (!$) {
+		return [];
+	}
+
+	const weaponLinks: string[] = [];
+
+	$("div.gallerytext p a").each((_, element) => {
+		const href = $(element).attr("href");
+
+		if (href && !href.startsWith("/wiki/Damage")) {
+			weaponLinks.push(BASE_URL + href);
+		}
+	});
+
+	return weaponLinks;
+};
+
 const scrapeAndStoreEnemies = async () => {
 	await client.connect();
 
@@ -64,11 +85,14 @@ const scrapeAndStoreEnemies = async () => {
 			continue;
 		}
 
-		const name = $("h1 span").text().trim();
+		const faction = $("aside h3:contains('Faction') + div span a")
+			.text()
+			.trim();
 		const imageURL = $("aside figure a img").attr("src");
+		const name = $("h1 span").text().trim();
 
-		if (name && imageURL) {
-			await storeEnemyData(name, BASE_URL + imageURL);
+		if (faction && imageURL && name) {
+			await storeEnemyData(faction, BASE_URL + imageURL, name);
 		}
 	}
 
@@ -77,11 +101,39 @@ const scrapeAndStoreEnemies = async () => {
 	console.log("Scraping complete!");
 };
 
-const storeEnemyData = async (name: string, imageURL: string) => {
+const scrapeAndStoreWeapons = async () => {
+	await client.connect();
+
+	const weaponLinks = await getWeaponLinks();
+
+	for (const weaponLink of weaponLinks) {
+		const $ = await fetchPage(weaponLink);
+
+		if (!$) {
+			continue;
+		}
+		const imageURL = $("aside figure a img").last().attr("src");
+		const name = $("h1 span").text().trim();
+
+		if (imageURL && name) {
+			await storeWeaponData(BASE_URL + imageURL, name);
+		}
+	}
+
+	await client.end();
+
+	console.log("Scraping complete!");
+};
+
+const storeEnemyData = async (
+	faction: string,
+	imageURL: string,
+	name: string
+) => {
 	try {
 		await client.query(
-			"INSERT INTO enemies (name, image_url) VALUES ($1, $2) ON CONFLICT (name) DO NOTHING;",
-			[name, imageURL]
+			"INSERT INTO enemies (name, faction, image_url) VALUES ($1, $2, $3) ON CONFLICT (name) DO NOTHING;",
+			[name, faction, imageURL]
 		);
 
 		console.log(`Stored: ${name}`);
@@ -90,4 +142,20 @@ const storeEnemyData = async (name: string, imageURL: string) => {
 	}
 };
 
-scrapeAndStoreEnemies();
+const storeWeaponData = async (
+	imageURL: string,
+	name: string
+) => {
+	try {
+		await client.query(
+			"INSERT INTO weapons (name, image_url) VALUES ($1, $2) ON CONFLICT (name) DO NOTHING;",
+			[name, imageURL]
+		);
+
+		console.log(`Stored: ${name}`);
+	} catch (error) {
+		console.error("Error storing weapon data:", error);
+	}
+};
+
+scrapeAndStoreWeapons();

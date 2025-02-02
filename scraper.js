@@ -43,6 +43,7 @@ var pg_1 = require("pg");
 dotenv.config();
 var BASE_URL = "https://helldivers.wiki.gg";
 var ENEMY_LIST_URL = "".concat(BASE_URL, "/wiki/Enemies");
+var WEAPONS_LIST_URL = "".concat(BASE_URL, "/wiki/Weapons");
 var client = new pg_1.Client({
     host: process.env.PGHOST,
     user: process.env.PGUSER,
@@ -92,8 +93,29 @@ var getEnemyLinks = function () { return __awaiter(void 0, void 0, void 0, funct
         }
     });
 }); };
+var getWeaponLinks = function () { return __awaiter(void 0, void 0, void 0, function () {
+    var $, weaponLinks;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, fetchPage(WEAPONS_LIST_URL)];
+            case 1:
+                $ = _a.sent();
+                if (!$) {
+                    return [2 /*return*/, []];
+                }
+                weaponLinks = [];
+                $("div.gallerytext p a").each(function (_, element) {
+                    var href = $(element).attr("href");
+                    if (href && !href.startsWith("/wiki/Damage")) {
+                        weaponLinks.push(BASE_URL + href);
+                    }
+                });
+                return [2 /*return*/, weaponLinks];
+        }
+    });
+}); };
 var scrapeAndStoreEnemies = function () { return __awaiter(void 0, void 0, void 0, function () {
-    var enemyLinks, _i, enemyLinks_1, enemyLink, $, name_1, imageURL;
+    var enemyLinks, _i, enemyLinks_1, enemyLink, $, faction, imageURL, name_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0: return [4 /*yield*/, client.connect()];
@@ -113,10 +135,13 @@ var scrapeAndStoreEnemies = function () { return __awaiter(void 0, void 0, void 
                 if (!$) {
                     return [3 /*break*/, 6];
                 }
-                name_1 = $("h1 span").text().trim();
+                faction = $("aside h3:contains('Faction') + div span a")
+                    .text()
+                    .trim();
                 imageURL = $("aside figure a img").attr("src");
-                if (!(name_1 && imageURL)) return [3 /*break*/, 6];
-                return [4 /*yield*/, storeEnemyData(name_1, BASE_URL + imageURL)];
+                name_1 = $("h1 span").text().trim();
+                if (!(faction && imageURL && name_1)) return [3 /*break*/, 6];
+                return [4 /*yield*/, storeEnemyData(faction, BASE_URL + imageURL, name_1)];
             case 5:
                 _a.sent();
                 _a.label = 6;
@@ -131,13 +156,52 @@ var scrapeAndStoreEnemies = function () { return __awaiter(void 0, void 0, void 
         }
     });
 }); };
-var storeEnemyData = function (name, imageURL) { return __awaiter(void 0, void 0, void 0, function () {
+var scrapeAndStoreWeapons = function () { return __awaiter(void 0, void 0, void 0, function () {
+    var weaponLinks, _i, weaponLinks_1, weaponLink, $, imageURL, name_2;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, client.connect()];
+            case 1:
+                _a.sent();
+                return [4 /*yield*/, getWeaponLinks()];
+            case 2:
+                weaponLinks = _a.sent();
+                _i = 0, weaponLinks_1 = weaponLinks;
+                _a.label = 3;
+            case 3:
+                if (!(_i < weaponLinks_1.length)) return [3 /*break*/, 7];
+                weaponLink = weaponLinks_1[_i];
+                return [4 /*yield*/, fetchPage(weaponLink)];
+            case 4:
+                $ = _a.sent();
+                if (!$) {
+                    return [3 /*break*/, 6];
+                }
+                imageURL = $("aside figure a img").last().attr("src");
+                name_2 = $("h1 span").text().trim();
+                if (!(imageURL && name_2)) return [3 /*break*/, 6];
+                return [4 /*yield*/, storeWeaponData(BASE_URL + imageURL, name_2)];
+            case 5:
+                _a.sent();
+                _a.label = 6;
+            case 6:
+                _i++;
+                return [3 /*break*/, 3];
+            case 7: return [4 /*yield*/, client.end()];
+            case 8:
+                _a.sent();
+                console.log("Scraping complete!");
+                return [2 /*return*/];
+        }
+    });
+}); };
+var storeEnemyData = function (faction, imageURL, name) { return __awaiter(void 0, void 0, void 0, function () {
     var error_2;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 _a.trys.push([0, 2, , 3]);
-                return [4 /*yield*/, client.query("INSERT INTO enemies (name, image_url) VALUES ($1, $2) ON CONFLICT (name) DO NOTHING;", [name, imageURL])];
+                return [4 /*yield*/, client.query("INSERT INTO enemies (name, faction, image_url) VALUES ($1, $2, $3) ON CONFLICT (name) DO NOTHING;", [name, faction, imageURL])];
             case 1:
                 _a.sent();
                 console.log("Stored: ".concat(name));
@@ -150,4 +214,23 @@ var storeEnemyData = function (name, imageURL) { return __awaiter(void 0, void 0
         }
     });
 }); };
-scrapeAndStoreEnemies();
+var storeWeaponData = function (imageURL, name) { return __awaiter(void 0, void 0, void 0, function () {
+    var error_3;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                _a.trys.push([0, 2, , 3]);
+                return [4 /*yield*/, client.query("INSERT INTO weapons (name, image_url) VALUES ($1, $2) ON CONFLICT (name) DO NOTHING;", [name, imageURL])];
+            case 1:
+                _a.sent();
+                console.log("Stored: ".concat(name));
+                return [3 /*break*/, 3];
+            case 2:
+                error_3 = _a.sent();
+                console.error("Error storing weapon data:", error_3);
+                return [3 /*break*/, 3];
+            case 3: return [2 /*return*/];
+        }
+    });
+}); };
+scrapeAndStoreWeapons();
