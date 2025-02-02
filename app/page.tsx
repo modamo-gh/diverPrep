@@ -6,7 +6,10 @@ type Enemy = {
 	faction: string;
 	id: number;
 	image_url: string;
+	max: number;
+	mode: number;
 	name: string;
+	weightedaverage: number;
 };
 
 type Weapon = {
@@ -100,6 +103,9 @@ const Home = () => {
 							alt={filteredEnemies[enemyIndex]?.name}
 						/>
 						<p>{filteredEnemies[enemyIndex]?.name}</p>
+						<p>Max Armor Value: {filteredEnemies[enemyIndex]?.max}</p>
+						<p>Most Common Armor Value: {filteredEnemies[enemyIndex]?.mode}</p>
+						<p>Rounded Average Weighted Armor Value: {filteredEnemies[enemyIndex]?.weightedaverage}</p>
 					</div>
 					<button
 						onClick={() =>

@@ -41,14 +41,35 @@ const getEnemyLinks = async () => {
 	}
 
 	const enemyLinks: string[] = [];
+	const elements = $("table.wikitable a").toArray();
 
-	$("table.wikitable a").each((_, element) => {
+	for (const element of elements) {
 		const href = $(element).attr("href");
 
 		if (href && !href.startsWith("/wiki/File:")) {
-			enemyLinks.push(BASE_URL + href);
+			const enemyName = $(element).text().trim();
+			const link = BASE_URL + href;
+
+			if (enemyName !== "Hulk" && enemyName !== "Tank") {
+				enemyLinks.push(link);
+			} else {
+				const $$ = await fetchPage(link);
+
+				if (!$$) {
+					continue;
+				}
+
+				const variantLinks = $$("p:contains('variant')")
+					.nextAll("ul")
+					.first()
+					.find("a")
+					.map((_, el) => BASE_URL + $$(el).attr("href"))
+					.get();
+
+				enemyLinks.push(...variantLinks);
+			}
 		}
-	});
+	}
 
 	return enemyLinks;
 };
@@ -91,13 +112,68 @@ const scrapeAndStoreEnemies = async () => {
 		const imageURL = $("aside figure a img").attr("src");
 		const name = $("h1 span").text().trim();
 
-		const anatomyTable =$("h2:contains('Anatomy')");
-		
-        console.log(name, anatomyTable.text())
+		const armorValues = $("table.wikitable")
+			.first()
+			.find("tr td:nth-child(3) span a img")
+			.map((_, element) => $(element).attr("alt")?.match(/\d+/)?.[0])
+			.get()
+			.map(Number);
 
-		// if (faction && imageURL && name) {
-		// 	await storeEnemyData(faction, BASE_URL + imageURL, name);
-		// }
+		const armorValueFrequencyTable = new Map<number, number>();
+
+		for (const value of armorValues) {
+			armorValueFrequencyTable.set(
+				value,
+				(armorValueFrequencyTable.get(value) || 0) + 1
+			);
+		}
+
+		const calculateMode = (frequencyTable: Map<number, number>) => {
+			let highestFrequency = 0;
+			let hightestFrequencyValue = -1;
+
+			for (const [value, frequency] of frequencyTable) {
+				if (
+					frequency > highestFrequency ||
+					(frequency === highestFrequency &&
+						value > hightestFrequencyValue)
+				) {
+					highestFrequency = frequency;
+					hightestFrequencyValue = value;
+				}
+			}
+
+			return hightestFrequencyValue;
+		};
+
+		const calculateWeightedAverage = (
+			frequencyTable: Map<number, number>
+		) => {
+			let weightedAverage = 0;
+
+			for (const [value, frequency] of frequencyTable) {
+				weightedAverage += value * (frequency / armorValues.length);
+			}
+
+			return Math.round(weightedAverage);
+		};
+
+		const max = Math.max(...armorValues);
+		const mode = calculateMode(armorValueFrequencyTable);
+		const weightedAverage = calculateWeightedAverage(
+			armorValueFrequencyTable
+		);
+
+		if (faction && imageURL && max && mode && name && weightedAverage) {
+			await storeEnemyData(
+				faction,
+				BASE_URL + imageURL,
+				max,
+				mode,
+				name,
+				weightedAverage
+			);
+		}
 	}
 
 	await client.end();
@@ -141,12 +217,15 @@ const scrapeAndStoreWeapons = async () => {
 const storeEnemyData = async (
 	faction: string,
 	imageURL: string,
-	name: string
+	max: number,
+	mode: number,
+	name: string,
+	weightedAverage: number
 ) => {
 	try {
 		await client.query(
-			"INSERT INTO enemies (name, faction, image_url) VALUES ($1, $2, $3) ON CONFLICT (name) DO NOTHING;",
-			[name, faction, imageURL]
+			"INSERT INTO enemies (name, faction, image_url, max, mode, weightedAverage) VALUES ($1, $2, $3, $4, $5, $6) ON CONFLICT (name) DO NOTHING;",
+			[name, faction, imageURL, max, mode, weightedAverage]
 		);
 
 		console.log(`Stored: ${name}`);
@@ -172,4 +251,4 @@ const storeWeaponData = async (
 	}
 };
 
-scrapeAndStoreEnemies();
+scrapeAndStoreWeapons();
