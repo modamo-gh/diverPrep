@@ -294,7 +294,12 @@ var scrapeAndStoreEnemies = function () { return __awaiter(void 0, void 0, void 
                                 max = Math.max.apply(Math, __spreadArray([], __read(armorValues), false));
                                 mode = calculateMode(armorValueFrequencyTable);
                                 weightedAverage = calculateWeightedAverage(armorValueFrequencyTable);
-                                if (!(faction && imageURL && max && mode && name_1 && weightedAverage)) return [3 /*break*/, 3];
+                                if (!(faction &&
+                                    imageURL &&
+                                    max !== undefined &&
+                                    mode !== undefined &&
+                                    name_1 &&
+                                    weightedAverage !== undefined)) return [3 /*break*/, 3];
                                 return [4 /*yield*/, storeEnemyData(faction, BASE_URL + imageURL, max, mode, name_1, weightedAverage)];
                             case 2:
                                 _d.sent();
@@ -435,4 +440,4 @@ var storeWeaponData = function (imageURL, name, penetration) { return __awaiter(
         }
     });
 }); };
-scrapeAndStoreWeapons();
+scrapeAndStoreEnemies();

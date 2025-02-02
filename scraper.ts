@@ -164,7 +164,14 @@ const scrapeAndStoreEnemies = async () => {
 			armorValueFrequencyTable
 		);
 
-		if (faction && imageURL && max && mode && name && weightedAverage) {
+		if (
+			faction &&
+			imageURL &&
+			max !== undefined &&
+			mode !== undefined &&
+			name &&
+			weightedAverage !== undefined
+		) {
 			await storeEnemyData(
 				faction,
 				BASE_URL + imageURL,
@@ -251,4 +258,4 @@ const storeWeaponData = async (
 	}
 };
 
-scrapeAndStoreWeapons();
+scrapeAndStoreEnemies();
