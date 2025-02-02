@@ -1,24 +1,8 @@
 "use client";
 
+import { Enemy, Weapon } from "@/types";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-
-type Enemy = {
-	faction: string;
-	id: number;
-	image_url: string;
-	max: number;
-	mode: number;
-	name: string;
-	weightedaverage: number;
-};
-
-type Weapon = {
-	id: number;
-	image_url: string;
-	name: string;
-	penetration: number;
-};
 
 const Home = () => {
 	const [enemies, setEnemies] = useState<Enemy[]>([]);
