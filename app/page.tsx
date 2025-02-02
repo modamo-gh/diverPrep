@@ -65,9 +65,9 @@ const Home = () => {
 			</div>
 			<div className="flex flex-1 items-center justify-around">
 				<p>
-					Max Armor Value?{" "}
+					Rounded Average Weighted Armor Value?{" "}
 					{weapons[weaponIndex]?.penetration >=
-					filteredEnemies[enemyIndex]?.max
+					filteredEnemies[enemyIndex]?.weightedaverage
 						? "✅"
 						: "❌"}
 				</p>
@@ -79,9 +79,9 @@ const Home = () => {
 						: "❌"}
 				</p>
 				<p>
-					Rounded Average Weighted Armor Value?{" "}
+					Max Armor Value?{" "}
 					{weapons[weaponIndex]?.penetration >=
-					filteredEnemies[enemyIndex]?.weightedaverage
+					filteredEnemies[enemyIndex]?.max
 						? "✅"
 						: "❌"}
 				</p>

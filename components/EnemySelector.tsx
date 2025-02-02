@@ -1,4 +1,3 @@
-
 import { EnemySelectorProps } from "@/types/props/EnemySelector";
 import Image from "next/image";
 
@@ -18,7 +17,7 @@ const EnemySelector: React.FC<EnemySelectorProps> = ({
 					)
 				}
 			>
-				Previous
+				{"<"}
 			</button>
 			<div className="flex flex-col flex-1 items-center justify-center">
 				<Image
@@ -26,15 +25,40 @@ const EnemySelector: React.FC<EnemySelectorProps> = ({
 					className="h-64 object-contain w-64 "
 					src={filteredEnemies[enemyIndex]?.image_url}
 				/>
-				<p>{filteredEnemies[enemyIndex]?.name}</p>
-				<p>Max Armor Value: {filteredEnemies[enemyIndex]?.max}</p>
-				<p>
-					Most Common Armor Value: {filteredEnemies[enemyIndex]?.mode}
-				</p>
-				<p>
-					Rounded Average Weighted Armor Value:{" "}
-					{filteredEnemies[enemyIndex]?.weightedaverage}
-				</p>
+				<table className="border border-black table-fixed text-center w-full">
+					<tbody>
+						<tr>
+							<td className="border border-black ">Name</td>
+							<td className="border border-black ">
+								{filteredEnemies[enemyIndex]?.name}
+							</td>
+						</tr>
+						<tr>
+							<td className="border border-black ">
+								Rounded Average Weighted Armor Value
+							</td>
+							<td className="border border-black ">
+								{filteredEnemies[enemyIndex]?.weightedaverage}
+							</td>
+						</tr>
+						<tr>
+							<td className="border border-black ">
+								Most Common Armor Value
+							</td>
+							<td className="border border-black ">
+								{filteredEnemies[enemyIndex]?.mode}
+							</td>
+						</tr>
+						<tr>
+							<td className="border border-black ">
+								Max Armor Value
+							</td>
+							<td className="border border-black ">
+								{filteredEnemies[enemyIndex]?.max}
+							</td>
+						</tr>
+					</tbody>
+				</table>
 			</div>
 			<button
 				onClick={() =>
@@ -45,7 +69,7 @@ const EnemySelector: React.FC<EnemySelectorProps> = ({
 					)
 				}
 			>
-				Next
+				{">"}
 			</button>
 		</div>
 	);

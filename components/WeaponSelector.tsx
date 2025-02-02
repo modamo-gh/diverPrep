@@ -15,7 +15,7 @@ const WeaponSelector: React.FC<WeaponSelectorProps> = ({
 					)
 				}
 			>
-				Previous
+				{"<"}
 			</button>
 			<div className="flex flex-col flex-1 items-center justify-center">
 				<Image
@@ -23,8 +23,24 @@ const WeaponSelector: React.FC<WeaponSelectorProps> = ({
 					className="h-64 object-contain w-64"
 					src={weapons[weaponIndex]?.image_url}
 				/>
-				<p>{weapons[weaponIndex]?.name}</p>
-				<p>Max Penetration: {weapons[weaponIndex]?.penetration}</p>
+				<table className="border border-black table-fixed text-center w-full">
+					<tbody>
+						<tr>
+							<td className="border border-black ">Name</td>
+							<td className="border border-black ">
+								{weapons[weaponIndex]?.name}
+							</td>
+						</tr>
+						<tr>
+							<td className="border border-black ">
+								Max Penetration
+							</td>
+							<td className="border border-black ">
+								{weapons[weaponIndex]?.penetration}
+							</td>
+						</tr>
+					</tbody>
+				</table>
 			</div>
 			<button
 				onClick={() =>
@@ -33,7 +49,7 @@ const WeaponSelector: React.FC<WeaponSelectorProps> = ({
 					)
 				}
 			>
-				Next
+				{">"}
 			</button>
 		</div>
 	);
