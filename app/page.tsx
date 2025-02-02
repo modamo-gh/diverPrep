@@ -1,19 +1,26 @@
 "use client";
 
-import { Enemy, Weapon } from "@/types";
+import FactionSelector from "@/components/FactionSelector";
+import { Enemy } from "@/types/Enemy";
+import { Weapon } from "@/types/Weapon";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 
 const Home = () => {
 	const [enemies, setEnemies] = useState<Enemy[]>([]);
-	const [weapons, setWeapons] = useState<Weapon[]>([]);
 	const [enemyIndex, setEnemyIndex] = useState(0);
+	const [factions, setFactions] = useState<string[]>([]);
+	const [factionIndex, setFactionIndex] = useState(0);
 	const [weaponIndex, setWeaponIndex] = useState(0);
+	const [weapons, setWeapons] = useState<Weapon[]>([]);
 
 	useEffect(() => {
 		fetch("/api/enemies")
 			.then((res) => res.json())
-			.then((data) => setEnemies(data))
+			.then((data: Enemy[]) => {
+				setEnemies(data);
+				setFactions([...new Set(data.map((enemy) => enemy.faction))]);
+			})
 			.catch((error) => console.error("Error fetching enemies:", error));
 
 		fetch("/api/weapons")
@@ -21,10 +28,6 @@ const Home = () => {
 			.then((data) => setWeapons(data))
 			.catch((error) => console.error("Error fetching weapons:", error));
 	}, []);
-
-	const factions = [...new Set(enemies.map((enemy) => enemy.faction))];
-
-	const [factionIndex, setFactionIndex] = useState(0);
 
 	const filteredEnemies = enemies.filter(
 		(enemy) => enemy.faction === factions[factionIndex]
@@ -40,41 +43,13 @@ const Home = () => {
 						</h1>
 					</div>
 					<div className="bg-red-500 flex flex-col flex-[4] items-center justify-center w-full">
-						<div className="flex flex-row flex-1 w-full">
-							<h2 className="pl-4">Faction:</h2>
-							<div className="flex flex-row flex-1 justify-around">
-								<button
-									className="px-4"
-									onClick={() => {
-										setFactionIndex((prevIndex) =>
-											prevIndex === 0
-												? factions.length - 1
-												: prevIndex - 1
-										);
-										setEnemyIndex(0);
-									}}
-								>
-									{"<"}
-								</button>
-								<h2 className="flex-1 text-center">
-									{factions[factionIndex]}
-								</h2>
-								<button
-									className="px-4"
-									onClick={() => {
-										setFactionIndex((prevIndex) =>
-											prevIndex === factions.length - 1
-												? 0
-												: prevIndex + 1
-										);
-										setEnemyIndex(0);
-									}}
-								>
-									{">"}
-								</button>
-							</div>
-						</div>
-						<div className="flex flex-row">
+						<FactionSelector
+							factionIndex={factionIndex}
+							factions={factions}
+							setEnemyIndex={setEnemyIndex}
+							setFactionIndex={setFactionIndex}
+						/>
+						<div className="flex flex-row flex-1">
 							<button
 								onClick={() =>
 									setEnemyIndex((prevIndex) =>
