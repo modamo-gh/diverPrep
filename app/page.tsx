@@ -43,43 +43,45 @@ const Home = () => {
 
 	return (
 		<main className="bg-gray-500 divide-black divide-x flex flex-row h-screen w-screen">
-			<div className="bg-blue-500 flex flex-col flex-1 items-center justify-center pt-6 text-4xl">
-				<h1 className="text-black">Enemy</h1>
-				<div className="flex flex-row w-full">
-					<h2 className="pl-4">Faction:</h2>
-					<div className="flex flex-row flex-1 justify-around">
-						<button
-							className="px-4"
-							onClick={() => {
-								setFactionIndex((prevIndex) =>
-									prevIndex === 0
-										? factions.length - 1
-										: prevIndex - 1
-								);
-								setEnemyIndex(0);
-							}}
-						>
-							{"<"}
-						</button>
-						<h2 className="flex-1 text-center">
-							{factions[factionIndex]}
-						</h2>
-						<button
-							className="px-4"
-							onClick={() => {
-								setFactionIndex((prevIndex) =>
-									prevIndex === factions.length - 1
-										? 0
-										: prevIndex + 1
-								);
-								setEnemyIndex(0);
-							}}
-						>
-							{">"}
-						</button>
+			<div className="flex flex-col flex-1 items-center justify-center">
+				<div className="bg-blue-500 flex flex-col flex-1 items-center justify-center w-full">
+					<h1 className="flex-1 text-black">Enemy</h1>
+					<div className="flex flex-row flex-1 w-full">
+						<h2 className="pl-4">Faction:</h2>
+						<div className="flex flex-row flex-1 justify-around">
+							<button
+								className="px-4"
+								onClick={() => {
+									setFactionIndex((prevIndex) =>
+										prevIndex === 0
+											? factions.length - 1
+											: prevIndex - 1
+									);
+									setEnemyIndex(0);
+								}}
+							>
+								{"<"}
+							</button>
+							<h2 className="flex-1 text-center">
+								{factions[factionIndex]}
+							</h2>
+							<button
+								className="px-4"
+								onClick={() => {
+									setFactionIndex((prevIndex) =>
+										prevIndex === factions.length - 1
+											? 0
+											: prevIndex + 1
+									);
+									setEnemyIndex(0);
+								}}
+							>
+								{">"}
+							</button>
+						</div>
 					</div>
 				</div>
-				<div className="bg-red-500 flex flex-col flex-1 items-center justify-center w-full">
+				<div className="bg-red-500 flex flex-col flex-[4] items-center justify-center w-full">
 					<button
 						onClick={() =>
 							setEnemyIndex((prevIndex) =>
@@ -111,9 +113,9 @@ const Home = () => {
 					</button>
 				</div>
 			</div>
-			<div className="flex flex-col flex-1 justify-center pt-6 text-4xl">
-				<h1 className="text-black">Weapon</h1>
-				<div className="bg-yellow-500 flex flex-col flex-1 items-center justify-center w-full">
+			<div className="flex flex-col flex-1 justify-center">
+				<h1 className="bg-red-500 flex-1 text-black text-center">Weapon</h1>
+				<div className="bg-blue-500 flex flex-col flex-[4] items-center justify-center w-full">
 					<button
 						onClick={() =>
 							setWeaponIndex((prevIndex) =>

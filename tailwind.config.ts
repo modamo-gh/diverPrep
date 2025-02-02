@@ -12,6 +12,9 @@ export default {
         background: "var(--background)",
         foreground: "var(--foreground)",
       },
+      fontFamily: {
+        insignia: ["Insignia Regular", "sans-serif"]
+      }
     },
   },
   plugins: [],
