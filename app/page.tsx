@@ -1,10 +1,12 @@
 "use client";
 
-import EnemySelector from "@/components/EnemySelector";
-import FactionSelector from "@/components/FactionSelector";
 import SectionHeader from "@/components/SectionHeader";
+import EnemySelector from "@/components/selectors/Enemy";
+import FactionSelector from "@/components/selectors/Faction";
+import WeaponSelector from "@/components/selectors/Weapon";
+import EnemyStats from "@/components/stats/Enemy";
+import WeaponStats from "@/components/stats/Weapon";
 import TacticalAssessment from "@/components/TacticalAssessment";
-import WeaponSelector from "@/components/WeaponSelector";
 import { Enemy } from "@/types/Enemy";
 import { Weapon } from "@/types/Weapon";
 import { useEffect, useState } from "react";
@@ -18,6 +20,10 @@ const Home = () => {
 	const [weapons, setWeapons] = useState<Weapon[]>([]);
 
 	useEffect(() => {
+		setEnemyIndex(0);
+		setFactionIndex(0);
+		setWeaponIndex(0);
+
 		fetch("/api/enemies")
 			.then((res) => res.json())
 			.then((data: Enemy[]) => {
@@ -37,31 +43,43 @@ const Home = () => {
 	);
 
 	return (
-		<main className="bg-gray-500 flex flex-col h-screen w-screen">
-			<div className="flex flex-row flex-[4]">
-				<div className="flex flex-col flex-1 items-center justify-center">
+		<main className="bg-gray-900 flex flex-col h-screen overflow-hidden text-white w-screen">
+			<div className="flex-[4] gap-4 grid grid-cols-2 p-6">
+				<div className="bg-red-500 flex flex-col">
 					<SectionHeader name={"Enemy"} />
-					<div className="bg-red-500 flex flex-col flex-[4] items-center justify-center w-full">
+					<div className="bg-yellow-500 flex flex-[4] relative w-full">
 						<FactionSelector
 							factionIndex={factionIndex}
 							factions={factions}
 							setEnemyIndex={setEnemyIndex}
 							setFactionIndex={setFactionIndex}
 						/>
-						<EnemySelector
-							enemyIndex={enemyIndex}
-							filteredEnemies={filteredEnemies}
-							setEnemyIndex={setEnemyIndex}
-						/>
+						<div className="bg-blue-500 flex flex-col flex-1">
+							<EnemySelector
+								enemyIndex={enemyIndex}
+								filteredEnemies={filteredEnemies}
+								setEnemyIndex={setEnemyIndex}
+							/>
+							<EnemyStats
+								enemyIndex={enemyIndex}
+								filteredEnemies={filteredEnemies}
+							/>
+						</div>
 					</div>
 				</div>
-				<div className="flex flex-col flex-1 justify-center">
+				<div className="bg-blue-500 flex flex-col">
 					<SectionHeader name={"Weapon"} />
-					<WeaponSelector
-						setWeaponIndex={setWeaponIndex}
-						weaponIndex={weaponIndex}
-						weapons={weapons}
-					/>
+					<div className="bg-red-500 flex flex-col flex-[4]">
+						<WeaponSelector
+							setWeaponIndex={setWeaponIndex}
+							weaponIndex={weaponIndex}
+							weapons={weapons}
+						/>
+						<WeaponStats
+							weaponIndex={weaponIndex}
+							weapons={weapons}
+						/>
+					</div>
 				</div>
 			</div>
 			<TacticalAssessment

@@ -7,7 +7,7 @@ const FactionSelector: React.FC<FactionSelectorProps> = ({
 	setFactionIndex
 }) => {
 	return (
-		<div className="flex flex-none flex-row pt-4 px-8 w-full">
+		<div className="absolute flex flex-none flex-row left-1/2 top-1 transform -translate-x-1/2 px-8 w-full">
 			<h2 className="flex-none">Faction:</h2>
 			<div className="flex flex-row flex-1 justify-start">
 				<button

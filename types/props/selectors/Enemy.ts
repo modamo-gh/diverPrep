@@ -1,5 +1,5 @@
+import { Enemy } from "@/types/Enemy";
 import { Dispatch, SetStateAction } from "react";
-import { Enemy } from "../Enemy";
 
 export type EnemySelectorProps = {
     enemyIndex: number;

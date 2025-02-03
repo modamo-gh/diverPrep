@@ -7,7 +7,7 @@ const TacticalAssessment: React.FC<TacticalAssessmentProps> = ({
 	weapons
 }) => {
 	return (
-		<div className="flex flex-1 items-center justify-around">
+		<div className="bg-purple-500 flex flex-1 items-center justify-around">
 			<p>
 				Rounded Average Weighted Armor Value?{" "}
 				{weapons[weaponIndex]?.penetration >=

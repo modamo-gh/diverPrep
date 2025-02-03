@@ -1,5 +1,5 @@
+import { Weapon } from "@/types/Weapon";
 import { Dispatch, SetStateAction } from "react";
-import { Weapon } from "../Weapon";
 
 export type WeaponSelectorProps = {
 	setWeaponIndex: Dispatch<SetStateAction<number>>;
