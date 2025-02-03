@@ -53,59 +53,61 @@ const Home = () => {
 	);
 
 	return (
-		<main className="bg-gray-900 flex flex-col gap-2 h-screen overflow-hidden p-2 text-white w-screen">
-			<div className="flex-[4] gap-2 grid grid-cols-2 rounded">
-				<div className="flex flex-col gap-2 h-full">
-					<SectionHeader name={"Enemy"} />
-					<div className="flex flex-col flex-[4] gap-2 w-full">
-						<FactionSelector
-							factionIndex={factionIndex}
-							factions={factions}
-							setEnemyIndex={setEnemyIndex}
-							setFactionIndex={setFactionIndex}
-						/>
-						<div className="flex flex-col flex-1 gap-2">
-							<EnemySelector
-								enemyIndex={enemyIndex}
-								filteredEnemies={filteredEnemies}
+		<main className="bg-gray-900 flex flex-col gap-2 h-screen min-h-0 overflow-hidden p-2 text-white w-screen">
+			<div className="flex flex-col flex-1 gap-2">
+				<div className="flex-1 gap-2 grid grid-cols-2 rounded">
+					<div className="flex flex-col gap-2 h-full">
+						<SectionHeader name={"Enemy"} />
+						<div className="flex flex-col flex-[4] gap-2 w-full">
+							<FactionSelector
+								factionIndex={factionIndex}
+								factions={factions}
 								setEnemyIndex={setEnemyIndex}
+								setFactionIndex={setFactionIndex}
 							/>
-							<EnemyStats
-								enemyIndex={enemyIndex}
-								filteredEnemies={filteredEnemies}
-							/>
+							<div className="flex flex-col flex-1 gap-2">
+								<EnemySelector
+									enemyIndex={enemyIndex}
+									filteredEnemies={filteredEnemies}
+									setEnemyIndex={setEnemyIndex}
+								/>
+								<EnemyStats
+									enemyIndex={enemyIndex}
+									filteredEnemies={filteredEnemies}
+								/>
+							</div>
 						</div>
 					</div>
-				</div>
-				<div className="flex flex-col gap-2 h-full">
-					<SectionHeader name={"Weapon"} />
-					<div className="flex flex-col flex-[4] gap-2 w-full">
-						<CategorySelector
-							categories={categories}
-							categoryIndex={categoryIndex}
-							setCategoryIndex={setCategoryIndex}
-							setWeaponIndex={setWeaponIndex}
-						/>
-						<div className="flex flex-col flex-1 gap-2">
-							<WeaponSelector
+					<div className="flex flex-col gap-2 h-full">
+						<SectionHeader name={"Weapon"} />
+						<div className="flex flex-col flex-[4] gap-2 w-full">
+							<CategorySelector
+								categories={categories}
+								categoryIndex={categoryIndex}
+								setCategoryIndex={setCategoryIndex}
 								setWeaponIndex={setWeaponIndex}
-								weaponIndex={weaponIndex}
-								filteredWeapons={filteredWeapons}
 							/>
-							<WeaponStats
-								weaponIndex={weaponIndex}
-								filteredWeapons={filteredWeapons}
-							/>
+							<div className="flex flex-col flex-1 gap-2">
+								<WeaponSelector
+									setWeaponIndex={setWeaponIndex}
+									weaponIndex={weaponIndex}
+									filteredWeapons={filteredWeapons}
+								/>
+								<WeaponStats
+									weaponIndex={weaponIndex}
+									filteredWeapons={filteredWeapons}
+								/>
+							</div>
 						</div>
 					</div>
 				</div>
+				<TacticalAssessment
+					enemyIndex={enemyIndex}
+					filteredEnemies={filteredEnemies}
+					weaponIndex={weaponIndex}
+					weapons={weapons}
+				/>
 			</div>
-			<TacticalAssessment
-				enemyIndex={enemyIndex}
-				filteredEnemies={filteredEnemies}
-				weaponIndex={weaponIndex}
-				weapons={weapons}
-			/>
 			<SocialFooter />
 		</main>
 	);

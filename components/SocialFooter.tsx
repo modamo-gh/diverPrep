@@ -4,7 +4,7 @@ import { SiBluesky } from "react-icons/si";
 
 const SocialFooter = () => {
 	return (
-		<footer className="bg-gray-800 border border-gray-600 flex h-0 items-center justify-around rounded p-6">
+		<footer className="bg-gray-800 border border-gray-600 flex-none grid grid-cols-3 place-items-center p-3 rounded shrink-0">
 			<a
 				href="https://bsky.app/profile/modamo.xyz"
 				rel="noopener noreferrer"

@@ -10,16 +10,20 @@ const WeaponStats: React.FC<WeaponStatsProps> = ({
 				<tbody>
 					<tr>
 						<td className="border border-gray-600">Name</td>
-						<td className="border border-gray-600">
-							{filteredWeapons[weaponIndex]?.name}
+						<td className="border border-gray-600 ">
+							<p className="h-12 items-center justify-center line-clamp-2 text-center">
+								{filteredWeapons[weaponIndex]?.name}
+							</p>
 						</td>
 					</tr>
 					<tr>
 						<td className="border border-gray-600">
 							Max Penetration
 						</td>
-						<td className="border border-gray-600 ">
-							{filteredWeapons[weaponIndex]?.penetration}
+						<td className="border border-gray-600 items-center justify-center">
+							<p className="text-center">
+								{filteredWeapons[weaponIndex]?.penetration}
+							</p>
 						</td>
 					</tr>
 				</tbody>

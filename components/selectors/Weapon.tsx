@@ -12,7 +12,9 @@ const WeaponSelector: React.FC<WeaponSelectorProps> = ({
 				className="flex-1 text-lg"
 				onClick={() =>
 					setWeaponIndex((prevIndex) =>
-						prevIndex === 0 ? filteredWeapons.length - 1 : prevIndex - 1
+						prevIndex === 0
+							? filteredWeapons.length - 1
+							: prevIndex - 1
 					)
 				}
 			>
@@ -21,7 +23,7 @@ const WeaponSelector: React.FC<WeaponSelectorProps> = ({
 			<div className="flex flex-col flex-[8] items-center justify-center">
 				<Image
 					alt={filteredWeapons[weaponIndex]?.name}
-					className="h-64 object-contain w-64"
+					className="h-auto md:h-48 md:w-48 object-contain max-w-full w-64"
 					src={filteredWeapons[weaponIndex]?.image_url}
 				/>
 			</div>
@@ -29,7 +31,9 @@ const WeaponSelector: React.FC<WeaponSelectorProps> = ({
 				className="flex-1 text-lg"
 				onClick={() =>
 					setWeaponIndex((prevIndex) =>
-						prevIndex === filteredWeapons.length - 1 ? 0 : prevIndex + 1
+						prevIndex === filteredWeapons.length - 1
+							? 0
+							: prevIndex + 1
 					)
 				}
 			>
