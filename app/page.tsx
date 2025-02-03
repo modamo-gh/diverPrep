@@ -94,6 +94,7 @@ const Home = () => {
 				weaponIndex={weaponIndex}
 				weapons={weapons}
 			/>
+			<SocialFooter />
 		</main>
 	);
 };
