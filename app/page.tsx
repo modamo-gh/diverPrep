@@ -58,47 +58,39 @@ const Home = () => {
 				<div className="flex-1 gap-2 grid grid-cols-2 rounded">
 					<div className="flex flex-col gap-2 h-full">
 						<SectionHeader name={"Enemy"} />
-						<div className="flex flex-col flex-[4] gap-2 w-full">
-							<FactionSelector
-								factionIndex={factionIndex}
-								factions={factions}
-								setEnemyIndex={setEnemyIndex}
-								setFactionIndex={setFactionIndex}
-							/>
-							<div className="flex flex-col flex-1 gap-2">
-								<EnemySelector
-									enemyIndex={enemyIndex}
-									filteredEnemies={filteredEnemies}
-									setEnemyIndex={setEnemyIndex}
-								/>
-								<EnemyStats
-									enemyIndex={enemyIndex}
-									filteredEnemies={filteredEnemies}
-								/>
-							</div>
-						</div>
+						<FactionSelector
+							factionIndex={factionIndex}
+							factions={factions}
+							setEnemyIndex={setEnemyIndex}
+							setFactionIndex={setFactionIndex}
+						/>
+						<EnemySelector
+							enemyIndex={enemyIndex}
+							filteredEnemies={filteredEnemies}
+							setEnemyIndex={setEnemyIndex}
+						/>
+						<EnemyStats
+							enemyIndex={enemyIndex}
+							filteredEnemies={filteredEnemies}
+						/>
 					</div>
 					<div className="flex flex-col gap-2 h-full">
 						<SectionHeader name={"Weapon"} />
-						<div className="flex flex-col flex-[4] gap-2 w-full">
-							<CategorySelector
-								categories={categories}
-								categoryIndex={categoryIndex}
-								setCategoryIndex={setCategoryIndex}
-								setWeaponIndex={setWeaponIndex}
-							/>
-							<div className="flex flex-col flex-1 gap-2">
-								<WeaponSelector
-									setWeaponIndex={setWeaponIndex}
-									weaponIndex={weaponIndex}
-									filteredWeapons={filteredWeapons}
-								/>
-								<WeaponStats
-									weaponIndex={weaponIndex}
-									filteredWeapons={filteredWeapons}
-								/>
-							</div>
-						</div>
+						<CategorySelector
+							categories={categories}
+							categoryIndex={categoryIndex}
+							setCategoryIndex={setCategoryIndex}
+							setWeaponIndex={setWeaponIndex}
+						/>
+						<WeaponSelector
+							setWeaponIndex={setWeaponIndex}
+							weaponIndex={weaponIndex}
+							filteredWeapons={filteredWeapons}
+						/>
+						<WeaponStats
+							weaponIndex={weaponIndex}
+							filteredWeapons={filteredWeapons}
+						/>
 					</div>
 				</div>
 				<TacticalAssessment
