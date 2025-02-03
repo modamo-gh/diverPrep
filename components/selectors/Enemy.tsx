@@ -23,7 +23,7 @@ const EnemySelector: React.FC<EnemySelectorProps> = ({
 			<div className="flex flex-col flex-[8] items-center justify-center">
 				<Image
 					alt={filteredEnemies[enemyIndex]?.name}
-					className="h-auto md:h-48 md:w-48 object-contain max-w-full w-64"
+					className="h-64 md:h-48 md:w-48 object-contain max-w-full w-64"
 					src={filteredEnemies[enemyIndex]?.image_url}
 				/>
 			</div>

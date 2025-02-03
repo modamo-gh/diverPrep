@@ -16,7 +16,7 @@ const EnemyStats: React.FC<EnemyStatsProps> = ({
 					</tr>
 					<tr>
 						<td className="border border-gray-600">
-							Weighted Armor Value
+							Weighted AV
 						</td>
 						<td className="border border-gray-600 ">
 							{filteredEnemies[enemyIndex]?.weightedaverage}
@@ -24,7 +24,7 @@ const EnemyStats: React.FC<EnemyStatsProps> = ({
 					</tr>
 					<tr>
 						<td className="border border-gray-600">
-							Most Common Armor Value
+							Most Common AV
 						</td>
 						<td className="border border-gray-600 ">
 							{filteredEnemies[enemyIndex]?.mode}
@@ -32,7 +32,7 @@ const EnemyStats: React.FC<EnemyStatsProps> = ({
 					</tr>
 					<tr>
 						<td className="border border-gray-600">
-							Max Armor Value
+							Max AV
 						</td>
 						<td className="border border-gray-600 ">
 							{filteredEnemies[enemyIndex]?.max}
