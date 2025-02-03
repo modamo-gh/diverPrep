@@ -4,6 +4,7 @@ import SectionHeader from "@/components/SectionHeader";
 import EnemySelector from "@/components/selectors/Enemy";
 import FactionSelector from "@/components/selectors/Faction";
 import WeaponSelector from "@/components/selectors/Weapon";
+import SocialFooter from "@/components/SocialFooter";
 import EnemyStats from "@/components/stats/Enemy";
 import WeaponStats from "@/components/stats/Weapon";
 import TacticalAssessment from "@/components/TacticalAssessment";
@@ -20,10 +21,7 @@ const Home = () => {
 	const [weapons, setWeapons] = useState<Weapon[]>([]);
 
 	useEffect(() => {
-		setEnemyIndex(0);
-		setFactionIndex(0);
 		setWeaponIndex(0);
-
 		fetch("/api/enemies")
 			.then((res) => res.json())
 			.then((data: Enemy[]) => {
@@ -45,9 +43,9 @@ const Home = () => {
 	return (
 		<main className="bg-gray-900 flex flex-col gap-2 h-screen overflow-hidden p-2 text-white w-screen">
 			<div className="flex-[4] gap-2 grid grid-cols-2 rounded">
-				<div className="flex flex-col gap-2">
+				<div className="flex flex-col gap-2 h-full">
 					<SectionHeader name={"Enemy"} />
-					<div className="flex flex-[4] relative w-full">
+					<div className="flex flex-col flex-[4] gap-2 w-full">
 						<FactionSelector
 							factionIndex={factionIndex}
 							factions={factions}
@@ -67,18 +65,26 @@ const Home = () => {
 						</div>
 					</div>
 				</div>
-				<div className="flex flex-col gap-2">
+				<div className="flex flex-col gap-2 h-full">
 					<SectionHeader name={"Weapon"} />
-					<div className="flex flex-col flex-[4] gap-2">
-						<WeaponSelector
-							setWeaponIndex={setWeaponIndex}
-							weaponIndex={weaponIndex}
-							weapons={weapons}
+					<div className="flex flex-col flex-[4] gap-2 w-full">
+						<FactionSelector
+							factionIndex={factionIndex}
+							factions={factions}
+							setEnemyIndex={setEnemyIndex}
+							setFactionIndex={setFactionIndex}
 						/>
-						<WeaponStats
-							weaponIndex={weaponIndex}
-							weapons={weapons}
-						/>
+						<div className="flex flex-col flex-1 gap-2">
+							<WeaponSelector
+								setWeaponIndex={setWeaponIndex}
+								weaponIndex={weaponIndex}
+								weapons={weapons}
+							/>
+							<WeaponStats
+								weaponIndex={weaponIndex}
+								weapons={weapons}
+							/>
+						</div>
 					</div>
 				</div>
 			</div>

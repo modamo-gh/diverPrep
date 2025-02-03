@@ -9,7 +9,7 @@ const WeaponSelector: React.FC<WeaponSelectorProps> = ({
 	return (
 		<div className="bg-gray-800 border border-gray-600 flex flex-row flex-[2] rounded">
 			<button
-				className="flex-1"
+				className="flex-1 text-lg"
 				onClick={() =>
 					setWeaponIndex((prevIndex) =>
 						prevIndex === 0 ? weapons.length - 1 : prevIndex - 1
@@ -26,7 +26,7 @@ const WeaponSelector: React.FC<WeaponSelectorProps> = ({
 				/>
 			</div>
 			<button
-				className="flex-1"
+				className="flex-1 text-lg"
 				onClick={() =>
 					setWeaponIndex((prevIndex) =>
 						prevIndex === weapons.length - 1 ? 0 : prevIndex + 1

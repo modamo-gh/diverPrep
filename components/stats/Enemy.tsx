@@ -5,7 +5,7 @@ const EnemyStats: React.FC<EnemyStatsProps> = ({
 	filteredEnemies
 }) => {
 	return (
-		<div className="bg-gray-800 border border-gray-600 border-l-0 border-r-0 border-t-0 flex-1 overflow-hidden rounded text-lg w-full">
+		<div className="bg-gray-800 border border-gray-600 border-l-0 border-r-0 border-t-0 flex-1 h-full min-h-40 overflow-hidden rounded text-lg w-full">
 			<table className="h-full table-fixed text-center w-full">
 				<tbody>
 					<tr>
@@ -16,7 +16,7 @@ const EnemyStats: React.FC<EnemyStatsProps> = ({
 					</tr>
 					<tr>
 						<td className="border border-gray-600">
-							Rounded Average Weighted Armor Value
+							Weighted Armor Value
 						</td>
 						<td className="border border-gray-600 ">
 							{filteredEnemies[enemyIndex]?.weightedaverage}
