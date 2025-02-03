@@ -7,9 +7,9 @@ const EnemySelector: React.FC<EnemySelectorProps> = ({
 	setEnemyIndex
 }) => {
 	return (
-		<div className="flex flex-row flex-[2]">
+		<div className="bg-gray-800 border border-gray-600 flex flex-row flex-[2] rounded">
 			<button
-				className="flex-1"
+				className="flex-1 text-lg"
 				onClick={() =>
 					setEnemyIndex((prevIndex) =>
 						prevIndex === 0
@@ -28,7 +28,7 @@ const EnemySelector: React.FC<EnemySelectorProps> = ({
 				/>
 			</div>
 			<button
-				className="flex-1"
+				className="flex-1 text-lg"
 				onClick={() =>
 					setEnemyIndex((prevIndex) =>
 						prevIndex === filteredEnemies.length - 1

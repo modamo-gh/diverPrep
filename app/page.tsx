@@ -43,18 +43,18 @@ const Home = () => {
 	);
 
 	return (
-		<main className="bg-gray-900 flex flex-col h-screen overflow-hidden text-white w-screen">
-			<div className="flex-[4] gap-4 grid grid-cols-2 p-6">
-				<div className="bg-red-500 flex flex-col">
+		<main className="bg-gray-900 flex flex-col gap-2 h-screen overflow-hidden p-2 text-white w-screen">
+			<div className="flex-[4] gap-2 grid grid-cols-2 rounded">
+				<div className="flex flex-col gap-2">
 					<SectionHeader name={"Enemy"} />
-					<div className="bg-yellow-500 flex flex-[4] relative w-full">
+					<div className="flex flex-[4] relative w-full">
 						<FactionSelector
 							factionIndex={factionIndex}
 							factions={factions}
 							setEnemyIndex={setEnemyIndex}
 							setFactionIndex={setFactionIndex}
 						/>
-						<div className="bg-blue-500 flex flex-col flex-1">
+						<div className="flex flex-col flex-1 gap-2">
 							<EnemySelector
 								enemyIndex={enemyIndex}
 								filteredEnemies={filteredEnemies}
@@ -67,9 +67,9 @@ const Home = () => {
 						</div>
 					</div>
 				</div>
-				<div className="bg-blue-500 flex flex-col">
+				<div className="flex flex-col gap-2">
 					<SectionHeader name={"Weapon"} />
-					<div className="bg-red-500 flex flex-col flex-[4]">
+					<div className="flex flex-col flex-[4] gap-2">
 						<WeaponSelector
 							setWeaponIndex={setWeaponIndex}
 							weaponIndex={weaponIndex}

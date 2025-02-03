@@ -2,22 +2,26 @@ import { WeaponStatsProps } from "@/types/props/stats/Weapon";
 
 const WeaponStats: React.FC<WeaponStatsProps> = ({ weaponIndex, weapons }) => {
 	return (
-		<table className="border border-black border-collapse flex-1 table-fixed text-center w-full">
-			<tbody>
-				<tr>
-					<td className="border border-black ">Name</td>
-					<td className="border border-black ">
-						{weapons[weaponIndex]?.name}
-					</td>
-				</tr>
-				<tr>
-					<td className="border border-black ">Max Penetration</td>
-					<td className="border border-black ">
-						{weapons[weaponIndex]?.penetration}
-					</td>
-				</tr>
-			</tbody>
-		</table>
+		<div className="bg-gray-800 flex-1 overflow-hidden rounded text-lg w-full">
+			<table className="h-full table-fixed text-center w-full">
+				<tbody>
+					<tr>
+						<td className="border border-gray-600 ">Name</td>
+						<td className="border border-gray-600 ">
+							{weapons[weaponIndex]?.name}
+						</td>
+					</tr>
+					<tr>
+						<td className="border border-gray-600 ">
+							Max Penetration
+						</td>
+						<td className="border border-gray-600 ">
+							{weapons[weaponIndex]?.penetration}
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
 	);
 };
 

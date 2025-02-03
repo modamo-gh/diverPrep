@@ -7,7 +7,7 @@ const WeaponSelector: React.FC<WeaponSelectorProps> = ({
 	weapons
 }) => {
 	return (
-		<div className="flex flex-row flex-[2]">
+		<div className="bg-gray-800 border border-gray-600 flex flex-row flex-[2] rounded">
 			<button
 				className="flex-1"
 				onClick={() =>
