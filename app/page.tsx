@@ -1,6 +1,7 @@
 "use client";
 
 import SectionHeader from "@/components/SectionHeader";
+import CategorySelector from "@/components/selectors/Category";
 import EnemySelector from "@/components/selectors/Enemy";
 import FactionSelector from "@/components/selectors/Faction";
 import WeaponSelector from "@/components/selectors/Weapon";
@@ -13,6 +14,8 @@ import { Weapon } from "@/types/Weapon";
 import { useEffect, useState } from "react";
 
 const Home = () => {
+	const [categories, setCategories] = useState<string[]>([]);
+	const [categoryIndex, setCategoryIndex] = useState(0);
 	const [enemies, setEnemies] = useState<Enemy[]>([]);
 	const [enemyIndex, setEnemyIndex] = useState(0);
 	const [factions, setFactions] = useState<string[]>([]);
@@ -32,9 +35,18 @@ const Home = () => {
 
 		fetch("/api/weapons")
 			.then((res) => res.json())
-			.then((data) => setWeapons(data))
+			.then((data: Weapon[]) => {
+				setWeapons(data);
+				setCategories([
+					...new Set(data.map((weapon) => weapon.category))
+				]);
+			})
 			.catch((error) => console.error("Error fetching weapons:", error));
 	}, []);
+
+	const filteredWeapons = weapons.filter(
+		(weapon) => weapon.category === categories[categoryIndex]
+	);
 
 	const filteredEnemies = enemies.filter(
 		(enemy) => enemy.faction === factions[factionIndex]
@@ -68,21 +80,21 @@ const Home = () => {
 				<div className="flex flex-col gap-2 h-full">
 					<SectionHeader name={"Weapon"} />
 					<div className="flex flex-col flex-[4] gap-2 w-full">
-						<FactionSelector
-							factionIndex={factionIndex}
-							factions={factions}
-							setEnemyIndex={setEnemyIndex}
-							setFactionIndex={setFactionIndex}
+						<CategorySelector
+							categories={categories}
+							categoryIndex={categoryIndex}
+							setCategoryIndex={setCategoryIndex}
+							setWeaponIndex={setWeaponIndex}
 						/>
 						<div className="flex flex-col flex-1 gap-2">
 							<WeaponSelector
 								setWeaponIndex={setWeaponIndex}
 								weaponIndex={weaponIndex}
-								weapons={weapons}
+								filteredWeapons={filteredWeapons}
 							/>
 							<WeaponStats
 								weaponIndex={weaponIndex}
-								weapons={weapons}
+								filteredWeapons={filteredWeapons}
 							/>
 						</div>
 					</div>

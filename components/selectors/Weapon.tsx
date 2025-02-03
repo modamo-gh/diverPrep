@@ -4,7 +4,7 @@ import Image from "next/image";
 const WeaponSelector: React.FC<WeaponSelectorProps> = ({
 	setWeaponIndex,
 	weaponIndex,
-	weapons
+	filteredWeapons
 }) => {
 	return (
 		<div className="bg-gray-800 border border-gray-600 flex flex-row flex-[2] rounded">
@@ -12,7 +12,7 @@ const WeaponSelector: React.FC<WeaponSelectorProps> = ({
 				className="flex-1 text-lg"
 				onClick={() =>
 					setWeaponIndex((prevIndex) =>
-						prevIndex === 0 ? weapons.length - 1 : prevIndex - 1
+						prevIndex === 0 ? filteredWeapons.length - 1 : prevIndex - 1
 					)
 				}
 			>
@@ -20,16 +20,16 @@ const WeaponSelector: React.FC<WeaponSelectorProps> = ({
 			</button>
 			<div className="flex flex-col flex-[8] items-center justify-center">
 				<Image
-					alt={weapons[weaponIndex]?.name}
+					alt={filteredWeapons[weaponIndex]?.name}
 					className="h-64 object-contain w-64"
-					src={weapons[weaponIndex]?.image_url}
+					src={filteredWeapons[weaponIndex]?.image_url}
 				/>
 			</div>
 			<button
 				className="flex-1 text-lg"
 				onClick={() =>
 					setWeaponIndex((prevIndex) =>
-						prevIndex === weapons.length - 1 ? 0 : prevIndex + 1
+						prevIndex === filteredWeapons.length - 1 ? 0 : prevIndex + 1
 					)
 				}
 			>

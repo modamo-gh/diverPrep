@@ -200,6 +200,10 @@ const scrapeAndStoreWeapons = async () => {
 			continue;
 		}
 
+		const category =
+			$("aside section h3:contains('Weapon Category') + div")
+				.text()
+				.trim() || "Throwables";
 		const imageURL = $("aside figure a img").last().attr("src");
 		const name = $("h1 span").text().trim();
 		const penetration = Number(
@@ -211,8 +215,13 @@ const scrapeAndStoreWeapons = async () => {
 					.trim()
 		);
 
-		if (imageURL && name && penetration) {
-			await storeWeaponData(BASE_URL + imageURL, name, penetration);
+		if (category && imageURL && name && penetration !== undefined) {
+			await storeWeaponData(
+				category,
+				BASE_URL + imageURL,
+				name,
+				penetration
+			);
 		}
 	}
 
@@ -242,14 +251,15 @@ const storeEnemyData = async (
 };
 
 const storeWeaponData = async (
+	category: string,
 	imageURL: string,
 	name: string,
 	penetration: number
 ) => {
 	try {
 		await client.query(
-			"INSERT INTO weapons (name, image_url, penetration) VALUES ($1, $2, $3) ON CONFLICT (name) DO NOTHING;",
-			[name, imageURL, penetration]
+			"INSERT INTO weapons (name, category, image_url, penetration) VALUES ($1, $2, $3, $4) ON CONFLICT (name) DO NOTHING;",
+			[name, category, imageURL, penetration]
 		);
 
 		console.log(`Stored: ${name}`);
@@ -257,5 +267,3 @@ const storeWeaponData = async (
 		console.error("Error storing weapon data:", error);
 	}
 };
-
-scrapeAndStoreEnemies();

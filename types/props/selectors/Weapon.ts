@@ -4,5 +4,5 @@ import { Dispatch, SetStateAction } from "react";
 export type WeaponSelectorProps = {
 	setWeaponIndex: Dispatch<SetStateAction<number>>;
     weaponIndex: number;
-    weapons: Weapon[];
+    filteredWeapons: Weapon[];
 };
