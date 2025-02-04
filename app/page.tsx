@@ -1,6 +1,6 @@
 "use client";
 
-import SectionHeader from "@/components/SectionHeader";
+import Section from "@/components/Section";
 import CategorySelector from "@/components/selectors/Category";
 import EnemySelector from "@/components/selectors/Enemy";
 import FactionSelector from "@/components/selectors/Faction";
@@ -10,7 +10,7 @@ import EnemyStats from "@/components/stats/Enemy";
 import WeaponStats from "@/components/stats/Weapon";
 import TacticalAssessment from "@/components/TacticalAssessment";
 import { Enemy } from "@/types/Enemy";
-import { Section } from "@/types/Section";
+import { SectionType } from "@/types/SectionType";
 import { Weapon } from "@/types/Weapon";
 import { useEffect, useState } from "react";
 
@@ -19,7 +19,7 @@ const Home = () => {
 	const [categoryIndex, setCategoryIndex] = useState(0);
 	const [enemies, setEnemies] = useState<Enemy[]>([]);
 	const [enemyIndex, setEnemyIndex] = useState(0);
-	const [expandedSection, setExpandedSection] = useState<Section | null>(
+	const [expandedSection, setExpandedSection] = useState<SectionType | null>(
 		null
 	);
 	const [factions, setFactions] = useState<string[]>([]);
@@ -55,9 +55,8 @@ const Home = () => {
 		(enemy) => enemy.faction === factions[factionIndex]
 	);
 
-	const toggleSection = (section: Section) => {
+	const toggleSection = (section: SectionType) => {
 		setExpandedSection((prev) => (prev === section ? null : section));
-		console.log(expandedSection);
 	};
 
 	return (
@@ -71,15 +70,11 @@ const Home = () => {
 							: "flex-[2] md:flex-1"
 					} gap-2 md:flex-row md:grid-cols-2 md:grid-rows-1 rounded transition-all duration-300 ease-in-out`}
 				>
-					<div
-						className={`flex flex-col gap-2 ${
-							expandedSection === "enemy"
-								? "flex-[8]"
-								: "flex-[1]"
-						} transition-all duration-300 ease-in-out`}
-						onClick={() => toggleSection("enemy")}
+					<Section
+						expandedSection={expandedSection}
+						name="enemy"
+						toggleSection={toggleSection}
 					>
-						<SectionHeader name={"Enemy"} />
 						<FactionSelector
 							factionIndex={factionIndex}
 							factions={factions}
@@ -95,16 +90,12 @@ const Home = () => {
 							enemyIndex={enemyIndex}
 							filteredEnemies={filteredEnemies}
 						/>
-					</div>
-					<div
-						className={`flex flex-col gap-2 ${
-							expandedSection === "weapon"
-								? "flex-[8]"
-								: "flex-[1]"
-						} transition-all duration-300 ease-in-out`}
-						onClick={() => toggleSection("weapon")}
+					</Section>
+					<Section
+						expandedSection={expandedSection}
+						name="weapon"
+						toggleSection={toggleSection}
 					>
-						<SectionHeader name={"Weapon"} />
 						<CategorySelector
 							categories={categories}
 							categoryIndex={categoryIndex}
@@ -120,15 +111,12 @@ const Home = () => {
 							weaponIndex={weaponIndex}
 							filteredWeapons={filteredWeapons}
 						/>
-					</div>
+					</Section>
 				</div>
-				<div
-					className={`flex ${
-						expandedSection === "assessment"
-							? "flex-[8]"
-							: "flex-[1]"
-					} md:flex-none flex-row transition-all duration-300 ease-in-out`}
-					onClick={() => toggleSection("assessment")}
+				<Section
+					expandedSection={expandedSection}
+					name="assessment"
+					toggleSection={toggleSection}
 				>
 					<TacticalAssessment
 						enemyIndex={enemyIndex}
@@ -137,14 +125,7 @@ const Home = () => {
 						weaponIndex={weaponIndex}
 						weapons={weapons}
 					/>
-					<div
-						className={`flex-1 ${
-							expandedSection === "assessment" ? "hidden" : "flex"
-						}  md:hidden`}
-					>
-						<SectionHeader name="Assessment" />
-					</div>
-				</div>
+				</Section>
 			</div>
 			<SocialFooter />
 		</main>

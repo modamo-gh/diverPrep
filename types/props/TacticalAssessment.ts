@@ -1,10 +1,10 @@
 import { Enemy } from "../Enemy";
-import { Section } from "../Section";
+import { SectionType } from "../SectionType";
 import { Weapon } from "../Weapon";
 
 export type TacticalAssessmentProps = {
 	enemyIndex: number;
-	expandedSection: Section | null;
+	expandedSection: SectionType | null;
 	filteredEnemies: Enemy[];
 	weaponIndex: number;
 	weapons: Weapon[];
