@@ -62,7 +62,7 @@ const Home = () => {
 
 	return (
 		<main className="bg-gray-900 flex flex-col gap-2 h-screen min-h-0 overflow-hidden p-2 text-white w-screen">
-			<div className="flex flex-col flex-1 gap-2">
+			<div className="flex flex-col flex-1 gap-2 h-full">
 				<div
 					className={`flex flex-col ${
 						expandedSection === "enemy" ||
@@ -130,15 +130,20 @@ const Home = () => {
 					} md:flex-none flex-row transition-all duration-300 ease-in-out`}
 					onClick={() => toggleSection("assessment")}
 				>
-					<div className="flex flex-1 md:hidden ">
-						<SectionHeader name="Assessment" />
-					</div>
 					<TacticalAssessment
 						enemyIndex={enemyIndex}
+						expandedSection={expandedSection}
 						filteredEnemies={filteredEnemies}
 						weaponIndex={weaponIndex}
 						weapons={weapons}
 					/>
+					<div
+						className={`flex-1 ${
+							expandedSection === "assessment" ? "hidden" : "flex"
+						}  md:hidden`}
+					>
+						<SectionHeader name="Assessment" />
+					</div>
 				</div>
 			</div>
 			<SocialFooter />
