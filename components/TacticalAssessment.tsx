@@ -7,7 +7,7 @@ const TacticalAssessment: React.FC<TacticalAssessmentProps> = ({
 	weapons
 }) => {
 	return (
-		<div className="bg-gray-800 border border-gray-600 grid grid-cols-3 grid-rows-2 items-center justify-around rounded text-lg">
+		<div className="hidden md:grid bg-gray-800 border border-gray-600 grid-cols-3 grid-rows-2 items-center justify-around rounded text-lg w-full">
 			<p className="text-center">Weighted AV?</p>{" "}
 			<p className="text-center">Most Common AV?</p>{" "}
 			<p className="text-center">Max AV?</p>

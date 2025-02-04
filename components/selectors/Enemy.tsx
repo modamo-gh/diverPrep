@@ -7,7 +7,7 @@ const EnemySelector: React.FC<EnemySelectorProps> = ({
 	setEnemyIndex
 }) => {
 	return (
-		<div className="bg-gray-800 border border-gray-600 flex flex-row flex-[2] rounded">
+		<div className="hidden bg-gray-800 border border-gray-600 md:flex flex-row flex-[2] rounded">
 			<button
 				className="flex-1 text-lg"
 				onClick={() =>

@@ -5,7 +5,7 @@ const EnemyStats: React.FC<EnemyStatsProps> = ({
 	filteredEnemies
 }) => {
 	return (
-		<div className="bg-gray-800 border-gray-600 border-0 flex-1 h-full min-h-40 overflow-hidden rounded text-lg w-full">
+		<div className="hidden md:flex bg-gray-800 border-gray-600 border-0 flex-1 h-full min-h-40 overflow-hidden rounded text-lg w-full">
 			<table className="h-full table-fixed text-center w-full">
 				<tbody>
 					<tr>
@@ -15,9 +15,7 @@ const EnemyStats: React.FC<EnemyStatsProps> = ({
 						</td>
 					</tr>
 					<tr>
-						<td className="border border-gray-600">
-							Weighted AV
-						</td>
+						<td className="border border-gray-600">Weighted AV</td>
 						<td className="border border-gray-600 ">
 							{filteredEnemies[enemyIndex]?.weightedaverage}
 						</td>
@@ -31,9 +29,7 @@ const EnemyStats: React.FC<EnemyStatsProps> = ({
 						</td>
 					</tr>
 					<tr>
-						<td className="border border-gray-600">
-							Max AV
-						</td>
+						<td className="border border-gray-600">Max AV</td>
 						<td className="border border-gray-600 ">
 							{filteredEnemies[enemyIndex]?.max}
 						</td>

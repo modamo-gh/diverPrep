@@ -27,7 +27,7 @@ const SocialFooter = () => {
 					src="/favicon.png"
 					width={24}
 				/>
-				<span className="text-yellow-500 text-lg">#4775-5898</span>
+				<span className="text-center text-lg text-yellow-500">#4775-5898</span>
 			</div>
 		</footer>
 	);
