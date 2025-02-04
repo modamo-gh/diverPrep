@@ -5,7 +5,7 @@ const WeaponStats: React.FC<WeaponStatsProps> = ({
 	filteredWeapons
 }) => {
 	return (
-		<div className="hidden md:flex bg-gray-800 border-gray-600 border-0 flex-1 h-full min-h-40 overflow-hidden rounded text-lg w-full">
+		<div className="md:flex bg-gray-800 border-gray-600 border-0 flex-1 h-full min-h-40 overflow-hidden rounded text-lg w-full">
 			<table className="h-full table-fixed text-center w-full">
 				<tbody>
 					<tr>

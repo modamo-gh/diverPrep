@@ -13,13 +13,20 @@ const Section: React.FC<SectionProps> = ({
 
 	return (
 		<div
-			className={`flex flex-col gap-2 ${
+			className={`flex flex-col ${
 				isExpanded ? "flex-[8]" : "flex-[1]"
-			} transition-all duration-300 ease-in-out`}
+			} gap-2 transition-all duration-300 ease-in-out`}
 			onClick={() => isSmall && toggleSection(name)}
 		>
 			{!isExpanded && <SectionHeader name={name} />}
-			{children}
+			{isExpanded || !isSmall ? (
+				<div
+					className="flex flex-col gap-2 h-full w-full"
+					onClick={(e) => e.stopPropagation()}
+				>
+					{children}
+				</div>
+			) : null}
 		</div>
 	);
 };
