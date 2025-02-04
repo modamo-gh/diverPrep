@@ -1,4 +1,3 @@
-import Image from "next/image";
 import { FaGithub } from "react-icons/fa";
 import { SiBluesky } from "react-icons/si";
 
@@ -19,16 +18,7 @@ const SocialFooter = () => {
 			>
 				<FaGithub className="text-yellow-500" size={24} />
 			</a>
-			<div className="flex flex-row gap-2 items-center justify-center">
-				<Image
-					alt="Helldivers Logo"
-					className="text-yellow-500"
-					height={24}
-					src="/favicon.png"
-					width={24}
-				/>
-				<span className="text-center text-lg text-yellow-500">#4775-5898</span>
-			</div>
+			<p className="text-center text-lg text-yellow-500">#4775-5898</p>
 		</footer>
 	);
 };
