@@ -1,17 +1,12 @@
 "use client";
 
 import Section from "@/components/Section";
-import CategorySelector from "@/components/selectors/Category";
-import EnemySelector from "@/components/selectors/Enemy";
-import FactionSelector from "@/components/selectors/Faction";
-import WeaponSelector from "@/components/selectors/Weapon";
 import SocialFooter from "@/components/SocialFooter";
-import EnemyStats from "@/components/stats/Enemy";
-import WeaponStats from "@/components/stats/Weapon";
 import TacticalAssessment from "@/components/TacticalAssessment";
 import { Enemy } from "@/types/Enemy";
 import { SectionType } from "@/types/SectionType";
 import { Weapon } from "@/types/Weapon";
+import Image from "next/image";
 import { useEffect, useState } from "react";
 
 const Home = () => {
@@ -33,7 +28,7 @@ const Home = () => {
 			try {
 				const [enemiesRes, weaponsRes] = await Promise.all([
 					fetch("/api/enemies"),
-					fetch("api/weapons")
+					fetch("/api/weapons")
 				]);
 
 				const [enemies, weapons]: [Enemy[], Weapon[]] =
@@ -57,93 +52,65 @@ const Home = () => {
 		getData();
 	}, []);
 
-	if (loading) {
-		return (
-			<div className="flex h-screen items-center justify-center text-white">
-				Loading...
-			</div>
-		);
-	}
-
-	const filteredWeapons = weapons.filter(
-		(weapon) => weapon.category === categories[categoryIndex]
-	);
-
-	const filteredEnemies = enemies.filter(
+	const enemySubset = enemies.filter(
 		(enemy) => enemy.faction === factions[factionIndex]
 	);
 
 	const toggleSection = (section: SectionType) => {
-		setExpandedSection((prev) => (prev === section ? null : section));
+		if (expandedSection !== section) {
+			setExpandedSection(section);
+		}
 	};
 
-	return (
-		<main className="bg-gray-900 flex flex-col gap-2 h-screen min-h-0 overflow-hidden p-2 text-white w-screen">
-			<div className="flex flex-col flex-1 gap-2 h-full">
-				<div
-					className={`flex flex-col ${
-						expandedSection === "enemy" ||
-						expandedSection === "weapon"
-							? "flex-[9] md:flex-1"
-							: "flex-[2] md:flex-1"
-					} gap-2 md:flex-row md:grid-cols-2 md:grid-rows-1 rounded transition-all duration-300 ease-in-out`}
-				>
-					<Section
-						expandedSection={expandedSection}
-						name="enemy"
-						toggleSection={toggleSection}
-					>
-						<FactionSelector
-							factionIndex={factionIndex}
-							factions={factions}
-							setEnemyIndex={setEnemyIndex}
-							setFactionIndex={setFactionIndex}
-						/>
-						<EnemySelector
-							enemyIndex={enemyIndex}
-							filteredEnemies={filteredEnemies}
-							setEnemyIndex={setEnemyIndex}
-						/>
-						<EnemyStats
-							enemyIndex={enemyIndex}
-							filteredEnemies={filteredEnemies}
-						/>
-					</Section>
-					<Section
-						expandedSection={expandedSection}
-						name="weapon"
-						toggleSection={toggleSection}
-					>
-						<CategorySelector
-							categories={categories}
-							categoryIndex={categoryIndex}
-							setCategoryIndex={setCategoryIndex}
-							setWeaponIndex={setWeaponIndex}
-						/>
-						<WeaponSelector
-							setWeaponIndex={setWeaponIndex}
-							weaponIndex={weaponIndex}
-							filteredWeapons={filteredWeapons}
-						/>
-						<WeaponStats
-							weaponIndex={weaponIndex}
-							filteredWeapons={filteredWeapons}
-						/>
-					</Section>
-				</div>
+	const weaponSubset = weapons.filter(
+		(weapon) => weapon.category === categories[categoryIndex]
+	);
+
+	return loading ? (
+		<main className="bg-gray-900 flex gap-2 p-2 h-screen w-screen">
+			<div className="bg-gray-800 border border-gray-600 flex flex-1 items-center justify-center">
+				<Image
+					alt={"Helldivers Logo"}
+					className="animate-pulse"
+					height={200}
+					src={"/favicon.png"}
+					width={200}
+				/>
+			</div>
+		</main>
+	) : (
+		<main className="animate-fadeIn bg-gray-900 flex flex-col gap-2 p-2 h-screen w-screen">
+			<div className="flex-1 gap-2 grid grid-cols-1 md:grid-cols-2 rounded">
 				<Section
+					entitySubset={enemySubset}
+					entitySubsetIndex={enemyIndex}
 					expandedSection={expandedSection}
-					name="assessment"
+					name="enemy"
+					setSubsetIndex={setFactionIndex}
+					setSupersetIndex={setEnemyIndex}
+					subset={factions}
+					subsetIndex={factionIndex}
 					toggleSection={toggleSection}
-				>
-					<TacticalAssessment
-						enemyIndex={enemyIndex}
-						expandedSection={expandedSection}
-						filteredEnemies={filteredEnemies}
-						weaponIndex={weaponIndex}
-						weapons={weapons}
-					/>
-				</Section>
+				/>
+				<Section
+					entitySubset={weaponSubset}
+					entitySubsetIndex={weaponIndex}
+					expandedSection={expandedSection}
+					name="weapon"
+					setSubsetIndex={setCategoryIndex}
+					setSupersetIndex={setWeaponIndex}
+					subset={categories}
+					subsetIndex={categoryIndex}
+					toggleSection={toggleSection}
+				/>
+				<TacticalAssessment
+					enemyIndex={enemyIndex}
+					expandedSection={expandedSection}
+					enemySubset={enemySubset}
+					toggleSection={toggleSection}
+					weaponIndex={weaponIndex}
+					weaponSubset={weaponSubset}
+				/>
 			</div>
 			<SocialFooter />
 		</main>

@@ -5,7 +5,8 @@ import { Weapon } from "../Weapon";
 export type TacticalAssessmentProps = {
 	enemyIndex: number;
 	expandedSection: SectionType | null;
-	filteredEnemies: Enemy[];
+	enemySubset: Enemy[];
+	toggleSection: (section: SectionType) => void;
 	weaponIndex: number;
-	weapons: Weapon[];
+	weaponSubset: Weapon[];
 };

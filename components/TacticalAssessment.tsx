@@ -4,66 +4,87 @@ import useIsSmall from "@/hooks/useIsSmall";
 const TacticalAssessment: React.FC<TacticalAssessmentProps> = ({
 	enemyIndex,
 	expandedSection,
-	filteredEnemies,
+	enemySubset,
+	toggleSection,
 	weaponIndex,
-	weapons
+	weaponSubset
 }) => {
 	const isSmall = useIsSmall();
 
 	return (
 		<div
-			className={`${
-				expandedSection === "assessment" ? "grid" : "hidden"
-			} md:grid flex-1 bg-gray-800 border border-gray-600 grid-cols-2 md:grid-cols-3 md:grid-rows-2 items-center justify-around rounded text-lg w-full`}
+			className={`bg-gray-800 border border-gray-600 flex items-center justify-center md:col-span-2 rounded ${
+				expandedSection === "assessment" ? "row-span-8" : "row-span-1"
+			} md:row-span-1`}
+			onClick={() => {
+				if (isSmall) {
+					toggleSection("assessment");
+				}
+			}}
 		>
-			{expandedSection === "assessment" && isSmall ? (
-				<>
-					<p className="text-center">Weighted AV?</p>
-					<p className="text-center">
-						{weapons[weaponIndex]?.penetration >=
-						filteredEnemies[enemyIndex]?.weightedaverage
+			{(!expandedSection || expandedSection !== "assessment") &&
+			isSmall ? (
+				<h1 className="font-bold text-yellow-500 text-4xl tracking-widest uppercase">
+					Assessment
+				</h1>
+			) : expandedSection === "assessment" && isSmall ? (
+				<div
+					className={`bg-gray-600 border-0 flex-1 gap-0.5 grid-cols-2 grid-rows-3 ${
+						expandedSection === "assessment" ? "grid" : "hidden"
+					} md:grid h-full place-items-center rounded w-full`}
+				>
+					<div className="bg-gray-800 flex h-full items-center justify-center text-center w-full">
+						Weighted AV?
+					</div>
+					<div className="bg-gray-800 flex h-full items-center justify-center text-center w-full">
+						{weaponSubset[weaponIndex]?.penetration >=
+						enemySubset[enemyIndex]?.weightedaverage
 							? "✅"
 							: "❌"}
-					</p>
-					<p className="text-center">Most Common AV?</p>
-					<p className="text-center">
-						{weapons[weaponIndex]?.penetration >=
-						filteredEnemies[enemyIndex]?.mode
+					</div>
+					<div className="bg-gray-800 flex h-full items-center justify-center text-center w-full">
+						Most Common AV?
+					</div>
+					<div className="bg-gray-800 flex h-full items-center justify-center text-center w-full">
+						{weaponSubset[weaponIndex]?.penetration >=
+						enemySubset[enemyIndex]?.mode
 							? "✅"
 							: "❌"}
-					</p>
-					<p className="text-center">Max AV?</p>
-					<p className="text-center">
-						{weapons[weaponIndex]?.penetration >=
-						filteredEnemies[enemyIndex]?.max
+					</div>
+					<div className="bg-gray-800 flex h-full items-center justify-center text-center w-full">
+						Max AV?
+					</div>
+					<div className="bg-gray-800 flex h-full items-center justify-center text-center w-full">
+						{weaponSubset[weaponIndex]?.penetration >=
+						enemySubset[enemyIndex]?.max
 							? "✅"
 							: "❌"}
-					</p>
-				</>
+					</div>
+				</div>
 			) : (
-				<>
-					<p className="text-center">Weighted AV?</p>{" "}
-					<p className="text-center">Most Common AV?</p>{" "}
-					<p className="text-center">Max AV?</p>
-					<p className="text-center">
-						{weapons[weaponIndex]?.penetration >=
-						filteredEnemies[enemyIndex]?.weightedaverage
+				<div className="grid grid-cols-3 h-full place-items-center p-2 text-center text-lg w-full ">
+					<p>Weighted AV?</p>
+					<p>Most Common AV?</p>
+					<p>Max AV?</p>
+					<p>
+						{weaponSubset[weaponIndex]?.penetration >=
+						enemySubset[enemyIndex]?.weightedaverage
 							? "✅"
 							: "❌"}
 					</p>
-					<p className="text-center">
-						{weapons[weaponIndex]?.penetration >=
-						filteredEnemies[enemyIndex]?.mode
+					<p>
+						{weaponSubset[weaponIndex]?.penetration >=
+						enemySubset[enemyIndex]?.mode
 							? "✅"
 							: "❌"}
 					</p>
-					<p className="text-center">
-						{weapons[weaponIndex]?.penetration >=
-						filteredEnemies[enemyIndex]?.max
+					<p>
+						{weaponSubset[weaponIndex]?.penetration >=
+						enemySubset[enemyIndex]?.max
 							? "✅"
 							: "❌"}
 					</p>
-				</>
+				</div>
 			)}
 		</div>
 	);
