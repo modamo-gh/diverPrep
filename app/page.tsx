@@ -24,28 +24,46 @@ const Home = () => {
 	);
 	const [factions, setFactions] = useState<string[]>([]);
 	const [factionIndex, setFactionIndex] = useState(0);
+	const [loading, setLoading] = useState(true);
 	const [weaponIndex, setWeaponIndex] = useState(0);
 	const [weapons, setWeapons] = useState<Weapon[]>([]);
 
 	useEffect(() => {
-		fetch("/api/enemies")
-			.then((res) => res.json())
-			.then((data: Enemy[]) => {
-				setEnemies(data);
-				setFactions([...new Set(data.map((enemy) => enemy.faction))]);
-			})
-			.catch((error) => console.error("Error fetching enemies:", error));
-
-		fetch("/api/weapons")
-			.then((res) => res.json())
-			.then((data: Weapon[]) => {
-				setWeapons(data);
-				setCategories([
-					...new Set(data.map((weapon) => weapon.category))
+		const getData = async () => {
+			try {
+				const [enemiesRes, weaponsRes] = await Promise.all([
+					fetch("/api/enemies"),
+					fetch("api/weapons")
 				]);
-			})
-			.catch((error) => console.error("Error fetching weapons:", error));
+
+				const [enemies, weapons]: [Enemy[], Weapon[]] =
+					await Promise.all([enemiesRes.json(), weaponsRes.json()]);
+
+				setEnemies(enemies);
+				setWeapons(weapons);
+				setFactions([
+					...new Set(enemies.map((enemy) => enemy.faction))
+				]);
+				setCategories([
+					...new Set(weapons.map((weapon) => weapon.category))
+				]);
+			} catch (error) {
+				console.error("Error fetching data:", error);
+			} finally {
+				setLoading(false);
+			}
+		};
+
+		getData();
 	}, []);
+
+	if (loading) {
+		return (
+			<div className="flex h-screen items-center justify-center text-white">
+				Loading...
+			</div>
+		);
+	}
 
 	const filteredWeapons = weapons.filter(
 		(weapon) => weapon.category === categories[categoryIndex]
