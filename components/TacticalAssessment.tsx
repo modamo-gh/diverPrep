@@ -1,5 +1,6 @@
 import { TacticalAssessmentProps } from "@/types/props/TacticalAssessment";
 import useIsSmall from "@/hooks/useIsSmall";
+import { useMemo } from "react";
 
 const TacticalAssessment: React.FC<TacticalAssessmentProps> = ({
 	enemyIndex,
@@ -9,8 +10,34 @@ const TacticalAssessment: React.FC<TacticalAssessmentProps> = ({
 	weaponIndex,
 	weaponSubset
 }) => {
-	let numberOfPasses = 0;
 	const isSmall = useIsSmall();
+
+	const numberOfPasses = useMemo(() => {
+		let count = 0;
+
+		if (
+			weaponSubset[weaponIndex]?.penetration >=
+			enemySubset[enemyIndex]?.weightedaverage
+		) {
+			count++;
+		}
+
+		if (
+			weaponSubset[weaponIndex]?.penetration >=
+			enemySubset[enemyIndex]?.mode
+		) {
+			count++;
+		}
+
+		if (
+			weaponSubset[weaponIndex]?.penetration >=
+			enemySubset[enemyIndex]?.max
+		) {
+			count++;
+		}
+
+		return count;
+	}, [enemyIndex, enemySubset, weaponIndex, weaponSubset]);
 
 	const getEmojiAssessment = () => {
 		switch (numberOfPasses) {
@@ -23,12 +50,6 @@ const TacticalAssessment: React.FC<TacticalAssessmentProps> = ({
 			default:
 				return "☠️";
 		}
-	};
-
-	const passConditional = () => {
-		numberOfPasses++;
-
-		return "✅";
 	};
 
 	return (
@@ -59,7 +80,7 @@ const TacticalAssessment: React.FC<TacticalAssessmentProps> = ({
 					<div className="bg-gray-800 flex h-full items-center justify-center text-center w-full">
 						{weaponSubset[weaponIndex]?.penetration >=
 						enemySubset[enemyIndex]?.weightedaverage
-							? passConditional()
+							? "✅"
 							: "❌"}
 					</div>
 					<div className="bg-gray-800 flex h-full items-center justify-center text-center w-full">
@@ -68,7 +89,7 @@ const TacticalAssessment: React.FC<TacticalAssessmentProps> = ({
 					<div className="bg-gray-800 flex h-full items-center justify-center text-center w-full">
 						{weaponSubset[weaponIndex]?.penetration >=
 						enemySubset[enemyIndex]?.mode
-							? passConditional()
+							? "✅"
 							: "❌"}
 					</div>
 					<div className="bg-gray-800 flex h-full items-center justify-center text-center w-full">
@@ -77,7 +98,7 @@ const TacticalAssessment: React.FC<TacticalAssessmentProps> = ({
 					<div className="bg-gray-800 flex h-full items-center justify-center text-center w-full">
 						{weaponSubset[weaponIndex]?.penetration >=
 						enemySubset[enemyIndex]?.max
-							? passConditional()
+							? "✅"
 							: "❌"}
 					</div>
 					<div className="bg-gray-800 flex h-full items-center justify-center text-center w-full">
@@ -88,26 +109,31 @@ const TacticalAssessment: React.FC<TacticalAssessmentProps> = ({
 					</div>
 				</div>
 			) : (
-				<div className="grid grid-cols-3 h-full place-items-center p-2 text-center text-lg w-full ">
+				<div className="grid grid-cols-7 grid-rows-2 h-full place-items-center p-2 text-center text-lg w-full ">
 					<p>Weighted AV?</p>
-					<p>Most Common AV?</p>
+					<div className="row-span-2">+</div>
+					<p>Most Common AV?</p> <div className="row-span-2">+</div>
 					<p>Max AV?</p>
+					<div className="row-span-2">=</div>
+					<div className="row-span-2 text-xl">
+						{getEmojiAssessment()}
+					</div>
 					<p>
 						{weaponSubset[weaponIndex]?.penetration >=
 						enemySubset[enemyIndex]?.weightedaverage
-							? "passConditional()"
+							? "✅"
 							: "❌"}
 					</p>
 					<p>
 						{weaponSubset[weaponIndex]?.penetration >=
 						enemySubset[enemyIndex]?.mode
-							? " passConditional()"
+							? "✅"
 							: "❌"}
 					</p>
 					<p>
 						{weaponSubset[weaponIndex]?.penetration >=
 						enemySubset[enemyIndex]?.max
-							? "passConditional()"
+							? "✅"
 							: "❌"}
 					</p>
 				</div>
