@@ -1,7 +1,7 @@
-import axios from "axios";
 import * as cheerio from "cheerio";
 import * as dotenv from "dotenv";
 import { Client } from "pg";
+import puppeteer, { Browser } from "puppeteer";
 
 dotenv.config();
 
@@ -17,24 +17,30 @@ const client = new Client({
 	port: Number(process.env.PGPORT)
 });
 
-const headers = {
-	"User-Agent": "Mozilla/5.0"
-};
-
-const fetchPage = async (url: string) => {
+const fetchPage = async (url: string, browser: Browser) => {
 	try {
-		const { data } = await axios.get(url, { headers });
+		const page = await browser.newPage();
 
-		return cheerio.load(data);
+		await page.setUserAgent(
+			"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 " +
+				"(KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36"
+		);
+		await page.goto(url, { waitUntil: "domcontentloaded" });
+
+		const content = await page.content();
+
+		await page.close();
+
+		return cheerio.load(content);
 	} catch (error) {
-		console.error(`Error fetching ${url}:`, error);
+		console.error(`Puppeteer error fetching ${url}:`, error);
 
 		return null;
 	}
 };
 
-const getEnemyLinks = async () => {
-	const $ = await fetchPage(ENEMY_LIST_URL);
+const getEnemyLinks = async (browser: Browser) => {
+	const $ = await fetchPage(ENEMY_LIST_URL, browser);
 
 	if (!$) {
 		return [];
@@ -53,7 +59,7 @@ const getEnemyLinks = async () => {
 			if (enemyName !== "Hulk" && enemyName !== "Tank") {
 				enemyLinks.push(link);
 			} else {
-				const $$ = await fetchPage(link);
+				const $$ = await fetchPage(link, browser);
 
 				if (!$$) {
 					continue;
@@ -74,8 +80,8 @@ const getEnemyLinks = async () => {
 	return enemyLinks;
 };
 
-const getWeaponLinks = async () => {
-	const $ = await fetchPage(WEAPONS_LIST_URL);
+const getWeaponLinks = async (browser: Browser) => {
+	const $ = await fetchPage(WEAPONS_LIST_URL, browser);
 
 	if (!$) {
 		return [];
@@ -94,13 +100,23 @@ const getWeaponLinks = async () => {
 	return weaponLinks;
 };
 
-const scrapeAndStoreEnemies = async () => {
-	await client.connect();
+const run = async () => {
+	const browser = await puppeteer.launch({ headless: true });
 
-	const enemyLinks = await getEnemyLinks();
+	await client.connect();
+	await scrapeAndStoreEnemies(browser);
+	await scrapeAndStoreWeapons(browser);
+	await client.end();
+	await browser.close();
+
+	console.log("All scraping complete!");
+};
+
+const scrapeAndStoreEnemies = async (browser: Browser) => {
+	const enemyLinks = await getEnemyLinks(browser);
 
 	for (const enemyLink of enemyLinks) {
-		const $ = await fetchPage(enemyLink);
+		const $ = await fetchPage(enemyLink, browser);
 
 		if (!$) {
 			continue;
@@ -183,20 +199,21 @@ const scrapeAndStoreEnemies = async () => {
 		}
 	}
 
-	await client.end();
-
-	console.log("Scraping complete!");
+	console.log("Enemy Scraping complete!");
 };
 
-const scrapeAndStoreWeapons = async () => {
-	await client.connect();
+const scrapeAndStoreWeapons = async (browser: Browser) => {
+	const weaponLinks = await getWeaponLinks(browser);
 
-	const weaponLinks = await getWeaponLinks();
+	console.log(`Found ${weaponLinks.length} weapon links`);
+	console.log("Sample links:", weaponLinks.slice(0, 3));
 
 	for (const weaponLink of weaponLinks) {
-		const $ = await fetchPage(weaponLink);
+		console.log("Fetching weapon:", weaponLink);
+		const $ = await fetchPage(weaponLink, browser);
 
 		if (!$) {
+			console.warn("Failed to load weapon page");
 			continue;
 		}
 
@@ -215,6 +232,8 @@ const scrapeAndStoreWeapons = async () => {
 					.trim()
 		);
 
+		console.log({ name, category, imageURL, penetration });
+
 		if (category && imageURL && name && penetration !== undefined) {
 			await storeWeaponData(
 				category,
@@ -225,9 +244,7 @@ const scrapeAndStoreWeapons = async () => {
 		}
 	}
 
-	await client.end();
-
-	console.log("Scraping complete!");
+	console.log("Weapon Scraping complete!");
 };
 
 const storeEnemyData = async (
@@ -267,3 +284,5 @@ const storeWeaponData = async (
 		console.error("Error storing weapon data:", error);
 	}
 };
+
+run();
