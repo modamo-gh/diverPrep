@@ -89,7 +89,7 @@ const getWeaponLinks = async (browser: Browser) => {
 
 	const weaponLinks: string[] = [];
 
-	$("div.gallerytext p a").each((_, element) => {
+	$("div.gallerytext a").each((_, element) => {
 		const href = $(element).attr("href");
 
 		if (href && !href.startsWith("/wiki/Damage")) {
@@ -204,9 +204,6 @@ const scrapeAndStoreEnemies = async (browser: Browser) => {
 
 const scrapeAndStoreWeapons = async (browser: Browser) => {
 	const weaponLinks = await getWeaponLinks(browser);
-
-	console.log(`Found ${weaponLinks.length} weapon links`);
-	console.log("Sample links:", weaponLinks.slice(0, 3));
 
 	for (const weaponLink of weaponLinks) {
 		console.log("Fetching weapon:", weaponLink);
